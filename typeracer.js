@@ -1,80 +1,94 @@
-setTimeout(function(){$("#text_to_type").text(allWords)}, 1)
+$(document).ready(function(){
 
-letterCounter = 0
-correctAttempts = 0
-failedAttempts = 0
-allWords = "Hello there, how are you? There are many things to be typed."
-allLetters = allWords.split("")
+  var letterCounter = 0
+  var correctAttempts = 0
+  var failedAttempts = 0
+  var allWords = "Hello there, how are you? There are many things to be typed."
+  var allLetters = allWords.split("")
 
-function getNextLetter() {
-  return allLetters[letterCounter] 
-}
+  $("#text_to_type").text(allWords)
 
-var programStarted = false
-
-startCountdown()
-
-var correctLetter = getNextLetter()
-
-// TODO: make it so keypresses are not tracked until countdown has completed
-$(document).keypress(function(event) {
-  var enteredLetterCode = event.keyCode
-  var enteredLetter = String.fromCharCode(enteredLetterCode)
-  // console.log(enteredLetter)
-  if ((enteredLetter === correctLetter) && programStarted) {
-    allLetters[letterCounter] = "<span style='color:orange;'>" + allLetters[letterCounter] + "</span>"
-    newText = allLetters.join("")
-    $("#text_to_type").text("")
-    $("#text_to_type").append(newText)
-    correctAttempts += 1
-    letterCounter += 1
-    checkForCompletion()
-    correctLetter = getNextLetter()
-    $("#error_display").text("")
-  } else if (programStarted) {
-    failedAttempts += 1
-    $("#error_display").text("ERROR")
+  function getNextLetter() {
+    return allLetters[letterCounter] 
   }
-})
 
-function checkForCompletion() {
-  if (letterCounter + 1 > allLetters.length) {
-    endTime = new Date()
-    outputWPM(getTotalTime())
-    outputAccuracy()
-  }
-}
+  var programActive = false
 
-function startCountdown() {
-  var secondsRemaining = 4
-  var countdownTimer = setInterval(timer, 1000)
-  function timer() {
-    secondsRemaining -= 1
-    if (secondsRemaining >= 1) {
-      $("#countdown").text(secondsRemaining + "...")
-    } else if (secondsRemaining === 0) {
-      $("#countdown").text("Go!")
-      startTime = new Date()
-      programStarted = true
-    } else if (secondsRemaining <= -1) {
-      clearInterval(countdownTimer)
-      $("#countdown").text(" ")
+  var currentLetterAlreadyMissed = false
+
+  startIntro()
+
+  var correctLetter = getNextLetter()
+
+  // TODO: make it so a user is only docked in accuracy once per letter (have letterAlreadyMissed variable)
+  // TODO: make more efficient by having only one span start and end tag in allLetters
+  $(document).keypress(function(event) {
+    var enteredLetterCode = event.keyCode
+    var enteredLetter = String.fromCharCode(enteredLetterCode)
+    if ((enteredLetter === correctLetter) && programActive) {
+      allLetters[letterCounter] = "<span style='color:orange;'>" + allLetters[letterCounter] + "</span>"
+      newText = allLetters.join("")
+      $("#text_to_type").text("")
+      $("#text_to_type").append(newText)
+      correctAttempts += 1
+      letterCounter += 1
+      currentLetterAlreadyMissed = false
+      checkForCompletion()
+      correctLetter = getNextLetter()
+      $("#error_display").text("")
+    } else if (programActive && !(currentLetterAlreadyMissed)) {
+      failedAttempts += 1
+      currentLetterAlreadyMissed = true
+      $("#error_display").text("ERROR")
+    }
+  })
+
+  function checkForCompletion() {
+    if (letterCounter + 1 > allLetters.length) {
+      endTime = new Date()
+      programActive = false
+      outputWPM(getTotalTime())
+      outputAccuracy()
     }
   }
-}
 
-function getTotalTime(start, stop) {
-  return endTime - startTime
-}
+  function startIntro(){
+    // TODO: Implement
+    startCountdown()
+  }
 
-function outputWPM(totalTime) {
-  var wpm = Math.round(((letterCounter + 1)/5)/(totalTime/1000/60)*100)/100;
-  document.getElementById("output_time").innerHTML = "Your WPM: " + wpm;
-}
+  function startCountdown() {
+    var secondsRemaining = 4
+    var countdownTimer = setInterval(timer, 1000)
+    function timer() {
+      secondsRemaining -= 1
+      if (secondsRemaining >= 1) {
+        $("#countdown").text(secondsRemaining + "...")
+      } else if (secondsRemaining === 0) {
+        $("#countdown").text("Go!")
+        startTime = new Date()
+        programActive = true
+      } else if (secondsRemaining <= -1) {
+        clearInterval(countdownTimer)
+        $("#countdown").text(" ")
+      }
+    }
+  }
 
-function outputAccuracy() {
-  var accuracy = correctAttempts / (correctAttempts + failedAttempts)
-  document.getElementById("output_accuracy").innerHTML = "Your Accuracy: " + (Math.round(accuracy * 100 * 100)/100) + '%';
-}
+  function getTotalTime(start, stop) {
+    return endTime - startTime
+  }
+
+  function outputWPM(totalTime) {
+    var wpm = Math.round(((letterCounter + 1)/5)/(totalTime/1000/60)*100)/100;
+    $("#output_time").html("Your WPM: " + wpm)
+  }
+
+  function outputAccuracy() {
+    var accuracy = correctAttempts / (correctAttempts + failedAttempts)
+    $("#output_accuracy").html("Your Accuracy: " + (Math.round(accuracy * 100 * 100)/100) + '%')
+  }
+
+})
 
 
