@@ -15,7 +15,7 @@ var correctLetter = getNextLetter()
 $(document).keypress(function(event) {
   var enteredLetterCode = event.keyCode
   var enteredLetter = String.fromCharCode(enteredLetterCode)
-  console.log(enteredLetter)
+  // console.log(enteredLetter)
   if (enteredLetter === correctLetter) {
     allLetters[letterCounter] = "<span style='color:red;'>" + allLetters[letterCounter] + "</span>"
     newText = allLetters.join("")
