@@ -8,10 +8,12 @@
 
 <body>
   <div id="text_to_type"></div>
-  <button id="start_time" onclick="start = new Date()">Start the muthafuckin' timer!</button>
+<!--   <button id="start_time" onclick="startCountdown()">Start the countdown!</button> -->
   <!-- start is a global javascript variable -->
   <br/>
-  <button id="stop_time" onclick="var totalTime = new Date() - start; outputWPM(totalTime); outputAccuracy()">I have HAD it with all these muthafuckin' SECONDS on this muthafuckin' TIMER!</button>
+<!--   <button id="stop_time" onclick="var totalTime = new Date() - start; outputWPM(totalTime); outputAccuracy()">Stop the timer!</button> -->
+  <div id="countdown"></div>
+  <div id="error_display" style="color:red;"></div>
   <div id="output_time"></div>
   <div id="output_accuracy"></div>
 </body>
