@@ -1,87 +1,94 @@
+$(document).ready(function(){
 
-setTimeout(function(){$("#text_to_type").text(all_words)}, 1)
+  var letterCounter = 0
+  var correctAttempts = 0
+  var failedAttempts = 0
+  var allWords = "Hello there, how are you? There are many things to be typed."
+  var allLetters = allWords.split("")
 
-// $(document).ready(function() {
-wordCounter = 0
-correctAttempts = 0
-failedAttempts = 0
-// var test_word = document.getElementById("text_to_type").innerHTML
-all_words = "Hello there how are you"
-// document.write(all_words)
-individual_words = all_words.split(" ")
+  $("#text_to_type").text(allWords)
 
-function getNextWord() {
-  return individual_words[wordCounter] 
-}
+  function getNextLetter() {
+    return allLetters[letterCounter] 
+  }
 
-test_word = getNextWord()
+  var programActive = false
 
-function checkForSpacePressOrEnter() {
-  if (event.keyCode == 32 || event.keyCode == 13) {
-    evaluateWord()
-    test_word = getNextWord()
-    clearTextBox()
-    var past_text = $("#text_to_type").text()
-    past_text_each_word = past_text.split(" ")
-    for (var i=0; i < wordCounter; i++) {
-      past_text_each_word[i] = "<span style='color:red;'>" + past_text_each_word[i] + "</span>"
+  var currentLetterAlreadyMissed = false
+
+  startIntro()
+
+  var correctLetter = getNextLetter()
+
+  // TODO: make it so a user is only docked in accuracy once per letter (have letterAlreadyMissed variable)
+  // TODO: make more efficient by having only one span start and end tag in allLetters
+  $(document).keypress(function(event) {
+    var enteredLetterCode = event.keyCode
+    var enteredLetter = String.fromCharCode(enteredLetterCode)
+    if ((enteredLetter === correctLetter) && programActive) {
+      allLetters[letterCounter] = "<span style='color:orange;'>" + allLetters[letterCounter] + "</span>"
+      newText = allLetters.join("")
+      $("#text_to_type").text("")
+      $("#text_to_type").append(newText)
+      correctAttempts += 1
+      letterCounter += 1
+      currentLetterAlreadyMissed = false
+      checkForCompletion()
+      correctLetter = getNextLetter()
+      $("#error_display").text("")
+    } else if (programActive && !(currentLetterAlreadyMissed)) {
+      failedAttempts += 1
+      currentLetterAlreadyMissed = true
+      $("#error_display").text("ERROR")
     }
-    new_text = past_text_each_word.join(" ")
-    $("#text_to_type").text("")
-    $("#text_to_type").append(new_text)
+  })
+
+  function checkForCompletion() {
+    if (letterCounter + 1 > allLetters.length) {
+      endTime = new Date()
+      programActive = false
+      outputWPM(getTotalTime())
+      outputAccuracy()
+    }
   }
-}
 
-function evaluateWord() {
-  var curr_word = document.getElementById("user_input").value
-  if (curr_word[0] === ' ' || curr_word[0] === '\n') {
-    curr_word = curr_word.slice(1,curr_word.length) 
+  function startIntro(){
+    // TODO: Implement
+    startCountdown()
   }
-  console.log(curr_word)
-  if (curr_word === test_word) {
-    correctAttempts += 1;
-    wordCounter += 1
-    // CLEAR ERROR RESPONSE HERE
-  } else {
-    failedAttempts += 1;
-    // ADD ERROR RESPONSE HERE
+
+  function startCountdown() {
+    var secondsRemaining = 4
+    var countdownTimer = setInterval(timer, 1000)
+    function timer() {
+      secondsRemaining -= 1
+      if (secondsRemaining >= 1) {
+        $("#countdown").text(secondsRemaining + "...")
+      } else if (secondsRemaining === 0) {
+        $("#countdown").text("Go!")
+        startTime = new Date()
+        programActive = true
+      } else if (secondsRemaining <= -1) {
+        clearInterval(countdownTimer)
+        $("#countdown").text(" ")
+      }
+    }
   }
-}
 
-function clearTextBox() {
-  document.getElementById("user_input").value = ""
-}
+  function getTotalTime(start, stop) {
+    return endTime - startTime
+  }
 
-function trackTime() {
-  
-}
+  function outputWPM(totalTime) {
+    var wpm = Math.round(((letterCounter + 1)/5)/(totalTime/1000/60)*100)/100;
+    $("#output_time").html("Your WPM: " + wpm)
+  }
 
-function newTime() {
-  return new Date()
-}
+  function outputAccuracy() {
+    var accuracy = correctAttempts / (correctAttempts + failedAttempts)
+    $("#output_accuracy").html("Your Accuracy: " + (Math.round(accuracy * 100 * 100)/100) + '%')
+  }
 
-function getTotalTime(start, stop) {
-  return stop - start
-}
-
-function sayHey() {
-  alert('hey!');
-}
-
-function outputWPM(totalTime) {
-  var wpm = Math.round(1/(totalTime/1000/60)*100)/100;
-  document.getElementById("output_time").innerHTML = "Your WPM: " + wpm;
-}
-
-function outputAccuracy() {
-  var accuracy = correctAttempts / (correctAttempts + failedAttempts)
-  document.getElementById("output_accuracy").innerHTML = "Your Accuracy: " + (Math.round(accuracy * 100 * 100)/100) + '%';
-}
-// })
-
-
-
-  // See: http://docs.jquery.com/Tutorials:Introducing_$(document).ready()
-
+})
 
 
