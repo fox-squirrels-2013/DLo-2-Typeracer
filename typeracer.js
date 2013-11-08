@@ -6,7 +6,7 @@ $(document).ready(function(){
   var letterCounter = 0
   var correctAttempts = 0
   var failedAttempts = 0
-  var allWords = xYZ[Math.floor(Math.random()*xYZ.length)]
+  var allWords = wordList[Math.floor(Math.random()*wordList.length)]
   var allLetters = allWords.split("")
 
   $("#text_to_type").text(allWords)
