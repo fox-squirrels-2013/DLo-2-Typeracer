@@ -6,6 +6,13 @@ body {
   font-size: 250%;
 }
 
+#lightning {
+  position: absolute;
+  z-index: -1;
+  left: 0px;
+  top: 0px;
+}
+
 #error_display {
   color: red;
 }
@@ -33,6 +40,10 @@ body {
 #sam_face {
   opacity: 0;
 }
+
+/*.flames {
+  opacity: 0;
+}*/
 
 .stop_scrolling {
   height: 100%;

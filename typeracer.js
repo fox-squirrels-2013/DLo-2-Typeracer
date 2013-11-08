@@ -1,8 +1,14 @@
 // TODO: allow reduction of samJackRagePoints
 // TODO: add pause button for theme song
 // TODO: shift text down gently instead of instantly when accuracy and wpm display
-// TODO: Add soundboard if player finishes game with <10 ragepoints
 // TODO: Add button to play again at end
+// TODO: Add firebase and score (calculated from allLetters.length, wpm, and accuracy) to add leaderboard
+// TODO: Add victory screen with soundboard and play again image, and victory conditions
+// TODO: Add defeat screen and conditions
+// TODO: Make SLJ's face move up and down a little bit at random
+// TODO: Implement flames and/or more SLJ faces that are added when rage grows
+// TODO: Add an instant demonstration that you've made a mistake -- either flash background color to red,
+//       or do something like flashing an image of red lightning and playing a thunder sound.
 
 $(document).ready(function(){
 
@@ -106,8 +112,14 @@ $(document).ready(function(){
     if (sound) {
       var samResponse = errorTriggeredAudio[Math.floor(Math.random()*errorTriggeredAudio.length)]
       sample(samResponse)
+      flashLightning()
     }
-    $("#sam_face").animate({opacity: (samJackRagePoints/10)}, 500)
+    if (samJackRagePoints <= 10) {
+      $("#sam_face").animate({opacity: (samJackRagePoints/10)}, 500)
+    } 
+    // else {
+    //   $(".flames").animate({opacity: ((samJackRagePoints-10)/10), 500})
+    // }
   }
 
   function displayText() {
@@ -162,7 +174,7 @@ $(document).ready(function(){
     $("#output_accuracy").animate({opacity:1}, 500)
   }
   
-  function themeSong(){
+  function themeSong() {
     var sample = document.createElement('audio')
     sample.setAttribute('src', 'audio/sammyltheme.m4a')
     sample.setAttribute('autoplay','autoplay')
@@ -172,10 +184,19 @@ $(document).ready(function(){
     })
   }
 
-  function sample(audiofile){
+  function sample(audiofile) {
     var sample = document.createElement('audio')
     sample.setAttribute('src', 'audio/' + audiofile + '.mp3')
     sample.setAttribute('autoplay','autoplay')
+  }
+
+  function flashLightning() {
+    leftVal = Math.floor(Math.random()*1100-500) + 'px'
+    topVal = Math.floor(Math.random()*1100-500) + 'px'
+    $('#lightning').css("left",leftVal)
+    $('#lightning').css("top",topVal)
+    $('#lightning').append("<img src='sj_pics/lightning.jpg' style='width:1000px; height:auto;'>")
+    setTimeout(function(){$('#lightning').html("")}, 100)
   }
 
 })
