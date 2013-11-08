@@ -33,3 +33,8 @@ body {
 #sam_face {
   opacity: 0;
 }
+
+.stop_scrolling {
+  height: 100%;
+  overflow: hidden;
+}

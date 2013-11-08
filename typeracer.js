@@ -1,7 +1,6 @@
 // TODO: allow reduction of samJackRagePoints
 // TODO: remove background tiling
 // TODO: add pause button for theme song
-// TODO: escape space key 
 
 $(document).ready(function(){
 
