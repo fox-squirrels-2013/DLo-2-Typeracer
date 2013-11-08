@@ -1,0 +1,56 @@
+body {
+  background-color: black;
+  background-repeat: none;  
+  background-size: 100%;  
+  -webkit-animation-name: test;
+  -webkit-animation-duration: 4s;
+  -webkit-animation-timing-function: linear;
+
+  /*background-image: url(sj_pics/sj_start.jpg);
+  background-repeat: no-repeat;
+  background-size: 100%;*/
+}
+
+@-webkit-keyframes test {
+  0% {
+    background-image: url('sj_pics/sj_start.jpg');
+     background-repeat: none;  
+  }
+  20% {
+    background-image: url('sj_pics/sj_mouth_open.jpg');
+     background-repeat: none;  
+  }
+  40% {
+    background-image: url('sj_pics/sj_mouth_open_eyes_red.jpg');
+     background-repeat: none;  
+  }
+  
+  60%{
+     background-image: url('sj_pics/sj_zoom_1.jpg');
+     background-repeat: none;  
+
+  }
+
+  80% {
+    background-image: url('sj_pics/sj_zoom_2.jpg');
+     background-repeat: none;  
+  }
+  
+  100% {
+    background-image: url('sj_pics/sj_zoom_3.jpg');
+     background-repeat: none;  
+  }
+}
+
+
+
+/*#background: {
+  width: 100%;
+  height:100%;
+  margin: none;
+  padding: none;
+}
+
+.game-screen:{
+  display: none;
+}*/
