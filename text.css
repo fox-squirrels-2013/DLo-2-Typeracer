@@ -29,3 +29,12 @@ body {
 #output_accuracy {
   opacity: 0;
 }
+
+#sam_face {
+  opacity: 0;
+}
+
+.stop_scrolling {
+  height: 100%;
+  overflow: hidden;
+}
