@@ -1,11 +1,12 @@
-// TODO: flesh out startIntro function
-// TODO: make errorCommitted and noErrorsRecently functions to wrap animated behaviors
+// TODO: implement samJackRagePoints
 
 $(document).ready(function(){
 
   var letterCounter = 0
   var correctAttempts = 0
   var failedAttempts = 0
+  var samJackRagePoints = 0
+  var secondsOfInactivityAllowed = 2
   var allWords = wordList[Math.floor(Math.random()*wordList.length)]
   var allLetters = allWords.split("")
 
@@ -18,6 +19,8 @@ $(document).ready(function(){
   var currentLetterAlreadyMissed = false
 
   startIntro()
+
+  var activityTimer = setInterval(checkForInactivity, (secondsOfInactivityAllowed * 1000))
 
   var correctLetter = getNextLetter()
 
@@ -34,18 +37,28 @@ $(document).ready(function(){
       newText = allLetters.join("")
       $("#text_to_type").text("")
       $("#text_to_type").append(newText)
-      correctAttempts += 1
-      letterCounter += 1
-      currentLetterAlreadyMissed = false
-      checkForCompletion()
-      correctLetter = getNextLetter()
-      $("#error_display").text("")
+      successCommitted()
     } else if (programActive && !(currentLetterAlreadyMissed)) {
-      failedAttempts += 1
-      currentLetterAlreadyMissed = true
-      $("#error_display").text("ERROR")
+      errorCommitted()
     }
   })
+
+  function errorCommitted() {
+    failedAttempts += 1
+    samJackAngerGrows()
+    currentLetterAlreadyMissed = true
+    // $("#error_display").text("ERROR")
+  }
+
+  function successCommitted() {
+    correctAttempts += 1
+    letterCounter += 1
+    currentLetterAlreadyMissed = false
+    checkForCompletion()
+    correctLetter = getNextLetter()
+    timeOfLastSuccess = new Date()
+    // $("#error_display").text("")
+  }
 
   function checkForCompletion() {
     if (letterCounter + 1 > allLetters.length) {
@@ -53,6 +66,7 @@ $(document).ready(function(){
       programActive = false
       outputWPM(getTotalTime())
       outputAccuracy()
+      clearInterval(activityTimer)
     }
   }
 
@@ -70,6 +84,18 @@ $(document).ready(function(){
     }
   }
 
+  function checkForInactivity() {
+    if (programActive && (((new Date() - timeOfLastSuccess)/1000) >= secondsOfInactivityAllowed)) {
+      samJackAngerGrows()
+    }
+  }
+
+  function samJackAngerGrows() {
+    samJackRagePoints += 1
+    // write to opacity of relevant image here
+    $("#error_display").text(samJackRagePoints)
+  }
+
   function displayText() {
     $("#text_to_type").text(allWords)
   }
@@ -83,13 +109,20 @@ $(document).ready(function(){
         $("#countdown").text(secondsRemaining + "...")
       } else if (secondsRemaining === 0) {
         $("#countdown").text("Go!")
-        startTime = new Date()
-        programActive = true
+        launchProgram()
       } else if (secondsRemaining <= -1) {
         clearInterval(countdownTimer)
         $("#countdown").text(" ")
       }
     }
+  }
+
+  function launchProgram() {
+    startTime = new Date()
+    programActive = true
+    /* if we allow player to play again without refreshing,
+       will need to reinitialize multiple variables here */
+    timeOfLastSuccess = new Date()
   }
 
   function getTotalTime(start, stop) {
