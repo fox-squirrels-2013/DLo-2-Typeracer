@@ -1,5 +1,3 @@
-// TODO: implement word lists in a separate file, select at random
-// TODO: make more efficient by having only one span start and end tag in allLetters\
 // TODO: flesh out startIntro function
 // TODO: make errorCommitted and noErrorsRecently functions to wrap animated behaviors
 
@@ -8,10 +6,8 @@ $(document).ready(function(){
   var letterCounter = 0
   var correctAttempts = 0
   var failedAttempts = 0
-  var allWords = "Hello there, how are you? There are many things to be typed."
+  var allWords = xYZ[Math.floor(Math.random()*xYZ.length)]
   var allLetters = allWords.split("")
-
-  console.log(xYZ)
 
   $("#text_to_type").text(allWords)
 
@@ -31,7 +27,12 @@ $(document).ready(function(){
     var enteredLetterCode = event.keyCode
     var enteredLetter = String.fromCharCode(enteredLetterCode)
     if ((enteredLetter === correctLetter) && programActive) {
-      allLetters[letterCounter] = "<span style='color:orange;'>" + allLetters[letterCounter] + "</span>"
+      if (letterCounter === 0) {
+        allLetters[letterCounter] = "<span style='color:orange;'>" + allLetters[letterCounter] + "</span>"
+      } else {
+        allLetters[letterCounter - 1] = allLetters[letterCounter - 1].slice(0,(allLetters[letterCounter - 1].length - 7)) // removes "</span>"
+        allLetters[letterCounter] = allLetters[letterCounter] + "</span>"
+      }
       newText = allLetters.join("")
       $("#text_to_type").text("")
       $("#text_to_type").append(newText)
