@@ -1,3 +1,16 @@
 body {
+  text-align: center;
   color: white;
+  font-size: 250%;
+}
+
+#error_display {
+  color: red;
+}
+
+#text_to_type {
+  text-align: justify;
+  width:80%;
+  display: block;
+  margin: 0 auto;
 }
