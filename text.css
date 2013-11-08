@@ -15,4 +15,9 @@ body {
   width:80%;
   display: block;
   margin: 0 auto;
+  opacity: 0;
+}
+
+#error_display {
+  opacity: 1;
 }

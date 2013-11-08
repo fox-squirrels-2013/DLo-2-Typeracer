@@ -1,4 +1,8 @@
-// TODO: implement samJackRagePoints
+// TODO: make samJackRagePoints correlate to opacity
+// TODO: allow reduction of samJackRagePoints
+// TODO: integrate audio
+// TODO: suppress delete key (backspace; keyCode 8)
+// TODO: remove background tiling
 
 $(document).ready(function(){
 
@@ -98,6 +102,7 @@ $(document).ready(function(){
 
   function displayText() {
     $("#text_to_type").text(allWords)
+    $("#text_to_type").animate({opacity:1}, 2000)
   }
 
   function startCountdown() {
@@ -110,9 +115,11 @@ $(document).ready(function(){
       } else if (secondsRemaining === 0) {
         $("#countdown").text("Go!")
         launchProgram()
-      } else if (secondsRemaining <= -1) {
+      } else if (secondsRemaining === -1) {
         clearInterval(countdownTimer)
-        $("#countdown").text(" ")
+        $("#countdown").animate({opacity:0}, 1000)
+      } else if (secondsRemaining <= -2) {
+        $("#countdown").text("")
       }
     }
   }
