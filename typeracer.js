@@ -22,7 +22,7 @@ $(document).ready(function(){
 
   var currentLetterAlreadyMissed = false
 
-  themeSong()
+  // themeSong()
   startIntro()
 
   var activityTimer = setInterval(checkForInactivity, (secondsOfInactivityAllowed * 1000))
