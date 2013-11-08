@@ -9,8 +9,6 @@ $(document).ready(function(){
   var allWords = wordList[Math.floor(Math.random()*wordList.length)]
   var allLetters = allWords.split("")
 
-  $("#text_to_type").text(allWords)
-
   function getNextLetter() {
     return allLetters[letterCounter] 
   }
@@ -59,8 +57,21 @@ $(document).ready(function(){
   }
 
   function startIntro(){
-    // TODO: Implement
-    startCountdown()
+    introDuration = parseInt($("body").css("-webkit-animation-duration"), 10)
+    var secondsRemaining = introDuration
+    var introTimer = setInterval(timer, 1000)
+    function timer(){
+      secondsRemaining -= 1
+      if (secondsRemaining === 0) {
+        clearInterval(introTimer)
+        displayText()
+        startCountdown()
+      }
+    }
+  }
+
+  function displayText() {
+    $("#text_to_type").text(allWords)
   }
 
   function startCountdown() {
