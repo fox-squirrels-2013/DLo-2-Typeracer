@@ -1,3 +1,8 @@
+// TODO: implement word lists in a separate file, select at random
+// TODO: make more efficient by having only one span start and end tag in allLetters\
+// TODO: flesh out startIntro function
+// TODO: make errorCommitted and noErrorsRecently functions to wrap animated behaviors
+
 $(document).ready(function(){
 
   var letterCounter = 0
@@ -5,6 +10,8 @@ $(document).ready(function(){
   var failedAttempts = 0
   var allWords = "Hello there, how are you? There are many things to be typed."
   var allLetters = allWords.split("")
+
+  console.log(xYZ)
 
   $("#text_to_type").text(allWords)
 
@@ -20,8 +27,6 @@ $(document).ready(function(){
 
   var correctLetter = getNextLetter()
 
-  // TODO: make it so a user is only docked in accuracy once per letter (have letterAlreadyMissed variable)
-  // TODO: make more efficient by having only one span start and end tag in allLetters
   $(document).keypress(function(event) {
     var enteredLetterCode = event.keyCode
     var enteredLetter = String.fromCharCode(enteredLetterCode)
