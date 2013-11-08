@@ -145,6 +145,16 @@ $(document).ready(function(){
     var accuracy = correctAttempts / (correctAttempts + failedAttempts)
     $("#output_accuracy").html("Your Accuracy: " + (Math.round(accuracy * 100 * 100)/100) + '%')
   }
+  
+  function themesong(audiofile){
+    var sample = document.createElement('audio');
+    sample.setAttribute('src', audiofile + '.m4a');
+    sample.setAttribute('autoplay','autoplay')
+
+    $('.' + audiofile).click(function() {
+        sample.pause();
+    });
+  };
 
 })
 
