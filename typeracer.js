@@ -1,7 +1,6 @@
 // TODO: make samJackRagePoints correlate to opacity
 // TODO: allow reduction of samJackRagePoints
 // TODO: integrate audio
-// TODO: suppress delete key (backspace; keyCode 8)
 // TODO: remove background tiling
 
 $(document).ready(function(){
@@ -29,6 +28,12 @@ $(document).ready(function(){
   var activityTimer = setInterval(checkForInactivity, (secondsOfInactivityAllowed * 1000))
 
   var correctLetter = getNextLetter()
+
+  $(document).keydown(function(event) {
+    if (event.keyCode === 8) {
+      event.preventDefault()
+    }
+  })
 
   $(document).keypress(function(event) {
     var enteredLetterCode = event.keyCode
