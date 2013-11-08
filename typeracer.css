@@ -1,14 +1,11 @@
 body {
   background-color: black;
   background-repeat: none;  
-  background-size: 100%;  
+  background-size: 100%; 
+  background-repeat: no-repeat; 
   -webkit-animation-name: test;
   -webkit-animation-duration: 4s;
   -webkit-animation-timing-function: linear;
-
-  /*background-image: url(sj_pics/sj_start.jpg);
-  background-repeat: no-repeat;
-  background-size: 100%;*/
 }
 
 @-webkit-keyframes test {
@@ -41,16 +38,3 @@ body {
      background-repeat: none;  
   }
 }
-
-
-
-/*#background: {
-  width: 100%;
-  height:100%;
-  margin: none;
-  padding: none;
-}
-
-.game-screen:{
-  display: none;
-}*/

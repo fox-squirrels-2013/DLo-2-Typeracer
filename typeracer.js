@@ -1,5 +1,4 @@
 // TODO: allow reduction of samJackRagePoints
-// TODO: remove background tiling
 // TODO: add pause button for theme song
 
 $(document).ready(function(){
