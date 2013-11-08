@@ -1,5 +1,8 @@
 // TODO: allow reduction of samJackRagePoints
 // TODO: add pause button for theme song
+// TODO: shift text down gently instead of instantly when accuracy and wpm display
+// TODO: Add soundboard if player finishes game with <10 ragepoints
+// TODO: Add button to play again at end
 
 $(document).ready(function(){
 
@@ -104,7 +107,7 @@ $(document).ready(function(){
       var samResponse = errorTriggeredAudio[Math.floor(Math.random()*errorTriggeredAudio.length)]
       sample(samResponse)
     }
-    $("#sam_face").animate({opacity: (samJackRagePoints/10)}, 1000)
+    $("#sam_face").animate({opacity: (samJackRagePoints/10)}, 500)
   }
 
   function displayText() {
