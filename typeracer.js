@@ -1,7 +1,7 @@
-// TODO: make samJackRagePoints correlate to opacity
 // TODO: allow reduction of samJackRagePoints
-// TODO: integrate audio
 // TODO: remove background tiling
+// TODO: add pause button for theme song
+// TODO: escape space key 
 
 $(document).ready(function(){
 
@@ -22,7 +22,6 @@ $(document).ready(function(){
   var currentLetterAlreadyMissed = false
 
   themeSong()
-
   startIntro()
 
   var activityTimer = setInterval(checkForInactivity, (secondsOfInactivityAllowed * 1000))
@@ -56,9 +55,8 @@ $(document).ready(function(){
 
   function errorCommitted() {
     failedAttempts += 1
-    samJackAngerGrows()
+    samJackAngerGrows(true)
     currentLetterAlreadyMissed = true
-    // $("#error_display").text("ERROR")
   }
 
   function successCommitted() {
@@ -68,7 +66,7 @@ $(document).ready(function(){
     checkForCompletion()
     correctLetter = getNextLetter()
     timeOfLastSuccess = new Date()
-    // $("#error_display").text("")
+    // do something to reduce rage counter here?
   }
 
   function checkForCompletion() {
@@ -90,6 +88,7 @@ $(document).ready(function(){
       if (secondsRemaining === 0) {
         clearInterval(introTimer)
         displayText()
+        displaySamJack()
         startCountdown()
       }
     }
@@ -97,19 +96,26 @@ $(document).ready(function(){
 
   function checkForInactivity() {
     if (programActive && (((new Date() - timeOfLastSuccess)/1000) >= secondsOfInactivityAllowed)) {
-      samJackAngerGrows()
+      samJackAngerGrows(false)
     }
   }
 
-  function samJackAngerGrows() {
-    samJackRagePoints += 1
-    // write to opacity of relevant image here
-    $("#error_display").text(samJackRagePoints)
+  function samJackAngerGrows(sound) {
+    samJackRagePoints += 1  
+    if (sound) {
+      var samResponse = errorTriggeredAudio[Math.floor(Math.random()*errorTriggeredAudio.length)]
+      sample(samResponse)
+    }
+    $("#sam_face").animate({opacity: (samJackRagePoints/10)}, 1000)
   }
 
   function displayText() {
     $("#text_to_type").text(allWords)
     $("#text_to_type").animate({opacity:1}, 2000)
+  }
+
+  function displaySamJack() {
+    $("#sam_face").append("<img src='sj_pics/sj_face.png'>")
   }
 
   function startCountdown() {
@@ -165,15 +171,11 @@ $(document).ready(function(){
     })
   }
 
-  // function themesong(audiofile){
-  //   var sample = document.createElement('audio')
-  //   sample.setAttribute('src', audiofile + '.m4a')
-  //   sample.setAttribute('autoplay','autoplay')
-
-  //   $('.' + audiofile).click(function() {
-  //       sample.pause()
-  //   })
-  // }
+  function sample(audiofile){
+    var sample = document.createElement('audio')
+    sample.setAttribute('src', 'audio/' + audiofile + '.mp3')
+    sample.setAttribute('autoplay','autoplay')
+  }
 
 })
 

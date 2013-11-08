@@ -15,3 +15,15 @@ var wordList = [
 "I have been given the gift of an incredibly intimidating voice, and I intend to use it to strike fear into the scum that plague our good streets. Listen to this: 'Hey! You! Motherfucker! Stop doing all that crime!' You see? Who wouldn't stop after that? How about this one: 'Yo! Knock that motherfucking crime-doing off!' And of course there's: 'Excuse me, young hoodlum? Look at me! I'm Samuel L. Jackson, bitch. You really think you're going to get away with this?'"
 
 ]
+
+var errorTriggeredAudio = [
+
+"Short Say What",
+
+"Tasty Burger",
+
+"MuthaFucka",
+
+"Correctimundo"
+
+]
