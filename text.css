@@ -21,3 +21,11 @@ body {
 #error_display {
   opacity: 1;
 }
+
+#output_time {
+  opacity: 0;
+}
+
+#output_accuracy {
+  opacity: 0;
+}

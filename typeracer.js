@@ -22,6 +22,8 @@ $(document).ready(function(){
 
   var currentLetterAlreadyMissed = false
 
+  themeSong()
+
   startIntro()
 
   var activityTimer = setInterval(checkForInactivity, (secondsOfInactivityAllowed * 1000))
@@ -33,7 +35,7 @@ $(document).ready(function(){
     var enteredLetter = String.fromCharCode(enteredLetterCode)
     if ((enteredLetter === correctLetter) && programActive) {
       if (letterCounter === 0) {
-        allLetters[letterCounter] = "<span style='color:orange;'>" + allLetters[letterCounter] + "</span>"
+        allLetters[letterCounter] = "<span style='color:purple;'>" + allLetters[letterCounter] + "</span>"
       } else {
         allLetters[letterCounter - 1] = allLetters[letterCounter - 1].slice(0,(allLetters[letterCounter - 1].length - 7)) // removes "</span>"
         allLetters[letterCounter] = allLetters[letterCounter] + "</span>"
@@ -139,22 +141,34 @@ $(document).ready(function(){
   function outputWPM(totalTime) {
     var wpm = Math.round(((letterCounter + 1)/5)/(totalTime/1000/60)*100)/100;
     $("#output_time").html("Your WPM: " + wpm)
+    $("#output_time").animate({opacity:1}, 500)
   }
 
   function outputAccuracy() {
     var accuracy = correctAttempts / (correctAttempts + failedAttempts)
     $("#output_accuracy").html("Your Accuracy: " + (Math.round(accuracy * 100 * 100)/100) + '%')
+    $("#output_accuracy").animate({opacity:1}, 500)
   }
   
-  function themesong(audiofile){
-    var sample = document.createElement('audio');
-    sample.setAttribute('src', audiofile + '.m4a');
+  function themeSong(){
+    var sample = document.createElement('audio')
+    sample.setAttribute('src', 'audio/sammyltheme.m4a')
     sample.setAttribute('autoplay','autoplay')
 
-    $('.' + audiofile).click(function() {
-        sample.pause();
-    });
-  };
+    $('#themesong').click(function() {
+        sample.pause()
+    })
+  }
+
+  // function themesong(audiofile){
+  //   var sample = document.createElement('audio')
+  //   sample.setAttribute('src', audiofile + '.m4a')
+  //   sample.setAttribute('autoplay','autoplay')
+
+  //   $('.' + audiofile).click(function() {
+  //       sample.pause()
+  //   })
+  // }
 
 })
 
