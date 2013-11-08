@@ -1,5 +1,5 @@
 body {
-  background-color: black;
+  background-color: black; /* black bg makes game unplayable.  we changed this to white before we could actually play.  we assume you'll change text color or something */
   background-repeat: none;  
   background-size: 100%;  
   -webkit-animation-name: test;
@@ -10,7 +10,7 @@ body {
   background-repeat: no-repeat;
   background-size: 100%;*/
 }
-
+/* flippin sweet animations, people.  we love slj. more cowbell would be good tho. */
 @-webkit-keyframes test {
   0% {
     background-image: url('sj_pics/sj_start.jpg');
