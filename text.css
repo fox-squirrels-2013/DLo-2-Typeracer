@@ -8,13 +8,9 @@ body {
 
 #lightning {
   position: absolute;
-  z-index: -1;
+  z-index: -2;
   left: 0px;
   top: 0px;
-}
-
-#error_display {
-  color: red;
 }
 
 #text_to_type {
@@ -39,11 +35,23 @@ body {
 
 #sam_face {
   opacity: 0;
+  left: 25%;
 }
 
-/*.flames {
+.flames {
+  position: absolute;
   opacity: 0;
-}*/
+  z-index: -1;
+  top: 450px;
+}
+
+#flame_one {
+  left: 0%;
+}
+
+#flame_two {
+  left: 70%;
+}
 
 .stop_scrolling {
   height: 100%;

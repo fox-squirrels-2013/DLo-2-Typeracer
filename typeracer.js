@@ -1,14 +1,12 @@
 // TODO: allow reduction of samJackRagePoints
 // TODO: add pause button for theme song
-// TODO: shift text down gently instead of instantly when accuracy and wpm display
+// TODO: shift text (and face) down gently instead of instantly when accuracy and wpm display
 // TODO: Add button to play again at end
 // TODO: Add firebase and score (calculated from allLetters.length, wpm, and accuracy) to add leaderboard
 // TODO: Add victory screen with soundboard and play again image, and victory conditions
 // TODO: Add defeat screen and conditions
 // TODO: Make SLJ's face move up and down a little bit at random
-// TODO: Implement flames and/or more SLJ faces that are added when rage grows
-// TODO: Add an instant demonstration that you've made a mistake -- either flash background color to red,
-//       or do something like flashing an image of red lightning and playing a thunder sound.
+// TODO: Make flame files have transparent backgrounds (svg files?)
 
 $(document).ready(function(){
 
@@ -96,6 +94,7 @@ $(document).ready(function(){
         clearInterval(introTimer)
         displayText()
         displaySamJack()
+        displayFlames()
         startCountdown()
       }
     }
@@ -116,10 +115,9 @@ $(document).ready(function(){
     }
     if (samJackRagePoints <= 10) {
       $("#sam_face").animate({opacity: (samJackRagePoints/10)}, 500)
-    } 
-    // else {
-    //   $(".flames").animate({opacity: ((samJackRagePoints-10)/10), 500})
-    // }
+    } else {
+      $(".flames").animate({opacity: ((samJackRagePoints-10)/10)}, 500)
+    }
   }
 
   function displayText() {
@@ -129,6 +127,11 @@ $(document).ready(function(){
 
   function displaySamJack() {
     $("#sam_face").append("<img src='sj_pics/sj_face.png'>")
+  }
+
+  function displayFlames() {
+    $("#flame_one").append("<img src='sj_pics/flames.jpg' style='width:400px; height:auto;'>")    
+    $("#flame_two").append("<img src='sj_pics/flames.jpg' style='width:400px; height:auto;'>")
   }
 
   function startCountdown() {
