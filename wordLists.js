@@ -1,1 +1,1 @@
-var xYZ = ["Hello there, how are you? There are many things to be typed.", "The duck goes QUACK!", "What does the fox say???"]
+var xYZ = "hi"
