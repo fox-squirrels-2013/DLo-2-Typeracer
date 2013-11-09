@@ -6,12 +6,48 @@ body {
   font-size: 200%;
 }
 
-#victory_img {
+.game_end_img {
   position: absolute;
   width: 100%;
   height: auto;
   right: 100%;
-  z-index: 3;
+  z-index: 3;  
+}
+
+#button_holder_win {
+  position: absolute;
+  left: 15%;
+  top: 35%;
+  z-index: 4;
+  opacity: 0;
+}
+
+#button_holder_win button {
+  border: 0;
+  background-color: #9966FF;
+  border-radius: 20px;
+  width: 100px;
+  height: 30px;
+  font-size: 14px;
+  color: white;
+}
+
+#button_holder_lose {
+  position: absolute;
+  left: 23%;
+  top: 21%;
+  z-index: 4;
+  opacity: 0;
+}
+
+#button_holder_lose button {
+  border: 0;
+  background-color: red;
+  border-radius: 20px;
+  width: 100px;
+  height: 30px;
+  font-size: 14px;
+  color: black;
 }
 
 #lightning {
@@ -40,7 +76,7 @@ body {
   color: yellow;
 }
 
-.output {
+.output_win {
   opacity: 0;
   z-index: 4;
   position: absolute;
@@ -58,6 +94,18 @@ body {
 
 #output_accuracy {
   top: 28%;
+}
+
+.output_lose {
+  opacity: 0;
+  z-index: 4;
+  position: absolute;
+  left: 10%;
+  color: red;
+}
+
+#output_defeat {
+  top: 12%;
 }
 
 #sam_face {

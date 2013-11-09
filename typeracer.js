@@ -1,12 +1,12 @@
-// TODO: Add defeat screen
-// TODO: Add button to play again at end
+// TODO: Make music stop at end of game, if that feels best
 // TODO: Make sure SLJ says nice things to you even if you're at zero ragepoints
+// TODO: Add a special sound from SLJ for victory and defeat
 // TODO: Add soundboard to victory screen
 // TODO: Add difficulty levels (increase speed at which rage increases, increase length of correct streak required to reduce rage. Add more flames, too?)
 // TODO: Add firebase and score (calculated from allLetters.length, wpm, and accuracy) to add leaderboard
 // TODO: Make SLJ's face move up and down a little bit at random
-// TODO: Make inactivity rage countup start a second or so more quickly, as it seemingly should?
-// TODO: Add pause button for theme song
+// TODO: Make inactivity rage countup start about a second or so more quickly, as it seemingly should?
+// TODO: Add toggle button for theme song
 
 $(document).ready(function(){
 
@@ -14,9 +14,10 @@ $(document).ready(function(){
   var correctAttempts = 0
   var failedAttempts = 0
   var samJackRagePoints = 0
-  var secondsOfInactivityAllowed = 2
+  var secondsOfInactivityAllowed = 1
   var streakToReduceRage = 30
   var successStreak = 0
+  var ragePointsForDefeat = 20
   var allWords = wordList[Math.floor(Math.random()*wordList.length)]
   var allLetters = allWords.split("")
 
@@ -86,7 +87,7 @@ $(document).ready(function(){
   }
 
   function checkForDefeat() {
-    if (samJackRagePoints >= 20) {
+    if (samJackRagePoints >= ragePointsForDefeat) {
       gameOver()  
       activateDefeat()
     }
@@ -106,11 +107,28 @@ $(document).ready(function(){
   function displayVictoryOutputs() {
     outputWPM(getTotalTime())
     outputAccuracy() 
-    outputVictoryStatement()   
+    outputVictoryStatement()
+    outputPlayAgainButtonWin()   
   }
 
   function activateDefeat() {
+    $('#defeat_img').animate({"right": "0%"}, 2000)
+    setTimeout(displayDefeatOutputs, 2000)
+  }
 
+  function displayDefeatOutputs() {
+    outputDefeatStatement()
+    outputPlayAgainButtonLose()  
+  }
+
+  function outputPlayAgainButtonWin() {
+    $("#button_holder_win").append('<button onclick="location.reload()">Play Again!</button>')
+    $("#button_holder_win").animate({opacity:1}, 2000)
+  } 
+
+  function outputPlayAgainButtonLose() {
+    $("#button_holder_lose").append('<button onclick="location.reload()">Play Again!</button>')
+    $("#button_holder_lose").animate({opacity:1}, 2000)   
   }
 
   function startIntro(){
@@ -139,7 +157,7 @@ $(document).ready(function(){
     samJackRagePoints += 1 
     successStreak = 0 
     checkForDefeat()
-    $("#sam_jack_rage").text("Mr. Jackson's Rage Points: " + samJackRagePoints + " (if he hits 20, you lose)")    
+    $("#sam_jack_rage").text("Mr. Jackson's Rage Points: " + samJackRagePoints + " (if he hits " + ragePointsForDefeat + ", you lose)")    
     if (sound) {
       var samResponse = errorTriggeredAudio[Math.floor(Math.random()*errorTriggeredAudio.length)]
       sample(samResponse)
@@ -150,7 +168,7 @@ $(document).ready(function(){
 
   function samJackAngerFalls() {
     samJackRagePoints -= 1
-    $("#sam_jack_rage").text("Mr. Jackson's Rage Points: " + samJackRagePoints + " (if he hits 20, you lose)")
+    $("#sam_jack_rage").text("Mr. Jackson's Rage Points: " + samJackRagePoints + " (if he hits " + ragePointsForDefeat + ", you lose)") 
     var samGoodResponse = successTriggeredAudio[Math.floor(Math.random()*successTriggeredAudio.length)]
     sample(samGoodResponse)
     changeImageOpacities()
@@ -167,7 +185,7 @@ $(document).ready(function(){
   function displayText() {
     $("#text_to_type").text(allWords)
     $("#text_to_type").animate({opacity:1}, 2000)
-    $("#sam_jack_rage").text("Mr. Jackson's Rage Points: " + samJackRagePoints + " (if he hits 20, you lose)")
+    $("#sam_jack_rage").text("Mr. Jackson's Rage Points: " + samJackRagePoints + " (if he hits " + ragePointsForDefeat + ", you lose)") 
     $("#sam_jack_rage").animate({opacity:1}, 2000)
   }
 
@@ -242,6 +260,11 @@ $(document).ready(function(){
     var sample = document.createElement('audio')
     sample.setAttribute('src', 'audio/' + audiofile + '.mp3')
     sample.setAttribute('autoplay','autoplay')
+  }
+
+  function outputDefeatStatement() {
+    $("#output_defeat").html("GAME OVER -- YOU LOST!")
+    $("#output_defeat").animate({opacity:1}, 500) 
   }
 
   function flashLightning() {
