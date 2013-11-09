@@ -1,4 +1,3 @@
-// TODO: Add soundboard to victory screen
 // TODO: Make 'play again' button disappear from victory screen at same time as other elements
 // TODO: Change 'button_holder_win' ID attribute in order to change its styling for soundboard screen, rather than using a jQuery .css call -- that'll let styling all be in same external stylesheet
 // TODO: Add difficulty levels (increase speed at which rage increases, increase length of correct streak required to reduce rage.)
@@ -137,18 +136,18 @@ $(document).ready(function(){
 
   function outputPlayAgainButtonWin() {
     $("#button_holder_win").append('<button onclick="location.reload()">Play Again!</button>')
-    $("#button_holder_win").animate({opacity:1}, 2000)
+    $("#button_holder_win").animate({opacity:1}, 1000)
   } 
 
   function outputPlayAgainButtonLose() {
     $("#button_holder_lose").append('<button onclick="location.reload()">Play Again!</button>')
-    $("#button_holder_lose").animate({opacity:1}, 2000)   
+    $("#button_holder_lose").animate({opacity:1}, 1000)   
   }
 
   function outputRewardButton() {
     $("#button_holder_reward").append('<button id="reward_button">I\'d like my reward, Mr. Jackson.</button>')
     $("#reward_button").click(activateReward)
-    $("#button_holder_reward").animate({opacity:1}, 2000)
+    $("#button_holder_reward").animate({opacity:1}, 1000)
   }
 
   function activateReward() {
@@ -333,9 +332,9 @@ $(document).ready(function(){
   }
 
   function displayReward() {
-    buttonList = ['Correctimundo', 'tasty_burger', 'MuthaFucka', 'fuck_you', 'hold_on_to_your_butts', 
+    buttonList = ['correctimundo', 'tasty_burger', 'motherfucker', 'fuck_you', 'hold_on_to_your_butts', 
                   "i_dont_remember", 'please_continue', 'say_what_again', 'shut_the_fuck_up', 'tasty_beverage',
-                  'whats_the_matter', 'english_muthafucka']
+                  'whats_the_matter', 'english_motherfucker']
     i = buttonList.length - 1
     while (i >= 0) {
       currFilename = buttonList[i]
@@ -357,7 +356,7 @@ $(document).ready(function(){
     $("#output_victory").html("Enjoy my words, motherfucker.")
     $("#output_victory").animate({opacity: 1}, 1000)
     enablePlayAgainButton()
-    $("#button_holder_win").css("top","75%")
+    $("#button_holder_win").css({"top":"20%","left":"18.5%"})
     $("#button_holder_win").animate({opacity: 1}, 1000)
     $("#soundboard").animate({opacity: 1}, 1000)
   }

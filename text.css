@@ -16,24 +16,20 @@ body {
 
 #soundboard {
   position: absolute;
-  width: 35%;
+  width: 40%;
   height: auto;
-  top: 20%;
+  top: 29%;
   left: 3%;
   z-index: 4;
   opacity: 0;
-}
-
-#soundboard li {
-  list-style-type: none;
 }
 
 #soundboard button {
   border: 0;
   background-color: #5C8AE6;
   border-radius: 20px;
-  width: 115px;
-  height: 45px;
+  width: 170px; /* change this */
+  height: 32px;
   font-size: 14px;
   color: white;  
 }
