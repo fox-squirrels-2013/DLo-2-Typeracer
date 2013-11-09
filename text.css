@@ -1,0 +1,62 @@
+body {
+  font-family: Tahoma, Geneva, sans-serif;
+  font-weight: bold;
+  text-align: center;
+  color: white;
+  font-size: 250%;
+}
+
+#lightning {
+  position: absolute;
+  z-index: -2;
+  left: 0px;
+  top: 0px;
+}
+
+#text_to_type {
+  text-align: justify;
+  width:80%;
+  display: block;
+  margin: 0 auto;
+  opacity: 0;
+}
+
+#rage_points_display {
+  opacity: 0;
+  font-size: 100%;
+  color: red;
+  text-align: center;
+}
+
+#output_time {
+  opacity: 0;
+}
+
+#output_accuracy {
+  opacity: 0;
+}
+
+#sam_face {
+  opacity: 0;
+  left: 25%;
+}
+
+.flames {
+  position: absolute;
+  opacity: 0;
+  z-index: -1;
+  top: 450px;
+}
+
+#flame_one {
+  left: 0%;
+}
+
+#flame_two {
+  left: 70%;
+}
+
+.stop_scrolling {
+  height: 100%;
+  overflow: hidden;
+}
