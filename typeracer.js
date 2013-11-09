@@ -1,4 +1,6 @@
 // TODO: Add soundboard to victory screen
+// TODO: Make flames fall in opacity when appropriate
+// TODO: Add favicon
 // TODO: Add difficulty levels (increase speed at which rage increases, increase length of correct streak required to reduce rage. Add more flames, too?)
 // TODO: Add score (calculated from allLetters.length, wpm, accuracy, and difficulty bonus -- and maybe longest streak bonus) to victory screen
 // TODO: Add firebase and leaderboard, with backspace button when you enter your name
@@ -115,7 +117,8 @@ $(document).ready(function(){
     outputWPM(getTotalTime())
     outputAccuracy() 
     outputVictoryStatement()
-    outputPlayAgainButtonWin()   
+    outputPlayAgainButtonWin()
+    outputRewardButton()   
   }
 
   function activateDefeat() {
@@ -136,6 +139,38 @@ $(document).ready(function(){
   function outputPlayAgainButtonLose() {
     $("#button_holder_lose").append('<button onclick="location.reload()">Play Again!</button>')
     $("#button_holder_lose").animate({opacity:1}, 2000)   
+  }
+
+  function outputRewardButton() {
+    $("#button_holder_reward").append('<button id="reward_button">I\'d like my reward, Mr. Jackson.</button>')
+    $("#reward_button").click(activateReward)
+    $("#button_holder_reward").animate({opacity:1}, 2000)
+  }
+
+  function activateReward() {
+    fadeOutVictoryOutputs()
+    setTimeout(removeVictoryOutputs, 500)
+    setTimeout(displayReward, 600)
+  }
+
+  function fadeOutVictoryOutputs() {
+    disablePlayAgainButton()
+    $("#button_holder_win").animate({opacity: 0}, 500)
+    $("#button_holder_reward").animate({opacity: 0}, 500)
+    $(".output_win").animate({opacity: 0}, 500)
+  }
+
+  function disablePlayAgainButton() {
+    $("#button_holder_win").html("")
+    $("#button_holder_win").append('<button>Play Again!</button>')
+  }
+
+  function removeVictoryOutputs() {
+    $("#button_holder_win").remove()
+    $("#button_holder_reward").remove()
+    $("#output_time").remove()
+    $("$output_accuracy").remove()
+    $("$output_victory").html("")
   }
 
   function startIntro(){
@@ -286,6 +321,32 @@ $(document).ready(function(){
     $('#lightning').css("top",topVal)
     $('#lightning').append("<img src='sj_pics/lightning.jpg' style='width:" + lightningWidth + "px; height:auto;'>")
     setTimeout(function(){$('#lightning').html("")}, 100)
+  }
+
+  function displayReward() {
+    buttonList = ['Correctimundo', 'tasty_burger', 'MuthaFucka', 'fuck_you', 'hold_on_to_your_butts',
+                  'i_dont_remember', 'please_continue', 'say_what_again', 'shut_the_fuck_up', 'tasty_beverage',
+                  'whats_the_matter', 'english_muthafucka']
+    for (i in buttonList) {
+      buttonInnerWords = buttonList[i].split("_")
+      for (i in buttonInnerWords) {
+        buttonInnerWords[i] = buttonInnerWords[i].charAt(0).toUpperCase() + buttonInnerWords[i].slice(1)
+      }
+      buttonInnerText = buttonInnerWords.join(" ")
+      $("#" + buttonList[i]).append("<button id=" + buttonList[i] + "_btn>" + buttonInnerText + "</button>")
+      sampleMaker(buttonList[i])
+    }
+    $("#output_victory").html("You can use my words any day.")
+    $("#output_victory").animate({opacity: 1}, 1000)
+    $("#soundboard").animate({opacity: 1}, 1000)
+  }
+
+  function sampleMaker(audiofile){
+    var sample = document.createElement('audio')
+    sample.setAttribute('src', "audio/" + audiofile + '.mp3')
+    $('#' + audiofile + '_btn').click(function() {
+        sample.play();
+    })
   }
 
 })
