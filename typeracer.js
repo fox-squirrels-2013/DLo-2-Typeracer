@@ -1,18 +1,13 @@
-// TODO: Add rage counter to top, in red, with note that you lose at twenty
-// TODO: Make lightning increase in size as rage grows
 // TODO: Allow reduction of samJackRagePoints
-// TODO: Add pause button for theme song
-// TODO: Shift text (and face) down gently instead of instantly when accuracy and wpm display
-// TODO: Add button to play again at end
+// TODO: Add defeat conditions (and, temporarily, text in place of rage counter)
 // TODO: Add firebase and score (calculated from allLetters.length, wpm, and accuracy) to add leaderboard
 // TODO: Add victory screen with soundboard and play again image, and victory conditions
-// TODO: Add defeat screen and conditions
+// TODO: Add defeat screen
 // TODO: Make SLJ's face move up and down a little bit at random
-// TODO: Change shade of purple in text?
-// TODO: Change countdown text to larger, light grey, ending on 'Type mofo'?
 // TODO: Make inactivity rage countup start a second or so more quickly, as it seemingly should?
-// TODO: Add firebase and leaderboard (and backspace button for entering your name)
 // TODO: Make victory/defeat screens slide in from offscreen (always rendered, high z-index)
+// TODO: Add pause button for theme song
+// TODO: Add button to play again at end
 
 $(document).ready(function(){
 
@@ -49,7 +44,7 @@ $(document).ready(function(){
     var enteredLetter = String.fromCharCode(enteredLetterCode)
     if ((enteredLetter === correctLetter) && programActive) {
       if (letterCounter === 0) {
-        allLetters[letterCounter] = "<span style='color:purple;'>" + allLetters[letterCounter] + "</span>"
+        allLetters[letterCounter] = "<span style='color:#C377F2;'>" + allLetters[letterCounter] + "</span>"
       } else {
         allLetters[letterCounter - 1] = allLetters[letterCounter - 1].slice(0,(allLetters[letterCounter - 1].length - 7)) // removes "</span>"
         allLetters[letterCounter] = allLetters[letterCounter] + "</span>"
@@ -113,6 +108,7 @@ $(document).ready(function(){
 
   function samJackAngerGrows(sound) {
     samJackRagePoints += 1  
+    $("#sam_jack_rage").text("Mr. Jackson's Rage Points: " + samJackRagePoints + " (if he hits 20, you lose)")    
     if (sound) {
       var samResponse = errorTriggeredAudio[Math.floor(Math.random()*errorTriggeredAudio.length)]
       sample(samResponse)
@@ -128,6 +124,8 @@ $(document).ready(function(){
   function displayText() {
     $("#text_to_type").text(allWords)
     $("#text_to_type").animate({opacity:1}, 2000)
+    $("#sam_jack_rage").text("Mr. Jackson's Rage Points: " + samJackRagePoints + " (if he hits 20, you lose)")
+    $("#sam_jack_rage").animate({opacity:1}, 2000)
   }
 
   function displaySamJack() {
@@ -147,11 +145,11 @@ $(document).ready(function(){
       if (secondsRemaining >= 1) {
         $("#countdown").text(secondsRemaining + "...")
       } else if (secondsRemaining === 0) {
-        $("#countdown").text("Go!")
+        $("#countdown").text("Type, motherfucker!")
         launchProgram()
       } else if (secondsRemaining === -1) {
         clearInterval(countdownTimer)
-        $("#countdown").animate({opacity:0}, 1000)
+        $("#countdown").animate({opacity:0}, 2000)
       } else if (secondsRemaining <= -2) {
         $("#countdown").text("")
       }
@@ -199,11 +197,17 @@ $(document).ready(function(){
   }
 
   function flashLightning() {
-    leftVal = Math.floor(Math.random()*1100-500) + 'px'
-    topVal = Math.floor(Math.random()*1100-500) + 'px'
+    lightningWidth = 940 + (samJackRagePoints * 60)
+    if (samJackRagePoints <= 10) {
+      leftVal = Math.floor(Math.random()*150 - 75) + '%'
+      topVal = Math.floor(Math.random()*120 - 60) + '%'
+    } else {
+      leftVal = Math.floor(Math.random()*100 - 50) + '%'
+      topVal = Math.floor(Math.random()*80 - 40) + '%'
+    }
     $('#lightning').css("left",leftVal)
     $('#lightning').css("top",topVal)
-    $('#lightning').append("<img src='sj_pics/lightning.jpg' style='width:1000px; height:auto;'>")
+    $('#lightning').append("<img src='sj_pics/lightning.jpg' style='width:" + lightningWidth + "px; height:auto;'>")
     setTimeout(function(){$('#lightning').html("")}, 100)
   }
 
