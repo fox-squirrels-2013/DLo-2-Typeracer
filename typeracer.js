@@ -6,7 +6,6 @@
 // TODO: Add victory screen with soundboard and play again image, and victory conditions
 // TODO: Add defeat screen and conditions
 // TODO: Make SLJ's face move up and down a little bit at random
-// TODO: Make flame files have transparent backgrounds (svg files?)
 
 $(document).ready(function(){
 
@@ -26,7 +25,6 @@ $(document).ready(function(){
 
   var currentLetterAlreadyMissed = false
 
-  // themeSong()
   startIntro()
 
   var activityTimer = setInterval(checkForInactivity, (secondsOfInactivityAllowed * 1000))
@@ -130,8 +128,8 @@ $(document).ready(function(){
   }
 
   function displayFlames() {
-    $("#flame_one").append("<img src='sj_pics/flames.jpg' style='width:400px; height:auto;'>")    
-    $("#flame_two").append("<img src='sj_pics/flames.jpg' style='width:400px; height:auto;'>")
+    $("#flame_one").append("<img src='sj_pics/flames.png' style='width:400px; height:auto;'>")    
+    $("#flame_two").append("<img src='sj_pics/flames.png' style='width:400px; height:auto;'>")
   }
 
   function startCountdown() {
