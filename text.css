@@ -16,15 +16,21 @@ body {
 
 #soundboard {
   position: absolute;
+  width: 35%;
+  height: auto;
   top: 20%;
   left: 3%;
   z-index: 4;
   opacity: 0;
 }
 
+#soundboard li {
+  list-style-type: none;
+}
+
 #soundboard button {
   border: 0;
-  background-color: #9966FF;
+  background-color: #5C8AE6;
   border-radius: 20px;
   width: 115px;
   height: 45px;

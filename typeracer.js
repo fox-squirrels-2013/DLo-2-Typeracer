@@ -1,4 +1,5 @@
 // TODO: Add soundboard to victory screen
+// TODO: Make 'play again' button disappear from victory screen at same time as other elements
 // TODO: Change 'button_holder_win' ID attribute in order to change its styling for soundboard screen, rather than using a jQuery .css call -- that'll let styling all be in same external stylesheet
 // TODO: Add difficulty levels (increase speed at which rage increases, increase length of correct streak required to reduce rage.)
 // TODO: Add favicon
@@ -332,22 +333,32 @@ $(document).ready(function(){
   }
 
   function displayReward() {
-    buttonList = ['Correctimundo', 'tasty_burger', 'MuthaFucka', 'fuck_you', 'hold_on_to_your_butts',
-                  "i_don't_remember", 'please_continue', 'say_what_again', 'shut_the_fuck_up', 'tasty_beverage',
+    buttonList = ['Correctimundo', 'tasty_burger', 'MuthaFucka', 'fuck_you', 'hold_on_to_your_butts', 
+                  "i_dont_remember", 'please_continue', 'say_what_again', 'shut_the_fuck_up', 'tasty_beverage',
                   'whats_the_matter', 'english_muthafucka']
-    for (i in buttonList) {
-      buttonInnerWords = buttonList[i].split("_")
-      for (i in buttonInnerWords) {
-        buttonInnerWords[i] = buttonInnerWords[i].charAt(0).toUpperCase() + buttonInnerWords[i].slice(1)
-      }
-      buttonInnerText = buttonInnerWords.join(" ")
-      $("#" + buttonList[i]).append("<button id=" + buttonList[i] + "_btn>" + buttonInnerText + "</button>")
-      sampleMaker(buttonList[i])
+    i = buttonList.length - 1
+    while (i >= 0) {
+      currFilename = buttonList[i]
+      $("#" + currFilename).append("<button id=" + currFilename + "_btn>" + currFilename + "</button>")
+      sampleMaker(currFilename)
+      i -= 1
     }
+    // for (i in buttonList) {
+    //   buttonInnerWords = buttonList[i].split("_")
+    //   console.log("1:", buttonList[i])
+    //   for (i in buttonInnerWords) {
+    //     buttonInnerWords[i] = buttonInnerWords[i].charAt(0).toUpperCase() + buttonInnerWords[i].slice(1)
+    //   }
+    //   buttonInnerText = buttonInnerWords.join(" ")
+    //   console.log("2:", buttonList[i])
+    //   $("#" + buttonList[i]).append("<button id=" + buttonList[i] + "_btn>" + buttonInnerText + "</button>")
+    //   sampleMaker(buttonList[i])
+    //   console.log("3:", buttonList[i])
+    // }
     $("#output_victory").html("Enjoy my words, motherfucker.")
     $("#output_victory").animate({opacity: 1}, 1000)
     enablePlayAgainButton()
-    $("#button_holder_win").css("top","60%")
+    $("#button_holder_win").css("top","75%")
     $("#button_holder_win").animate({opacity: 1}, 1000)
     $("#soundboard").animate({opacity: 1}, 1000)
   }
