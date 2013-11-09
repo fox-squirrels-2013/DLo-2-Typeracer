@@ -339,22 +339,21 @@ $(document).ready(function(){
     i = buttonList.length - 1
     while (i >= 0) {
       currFilename = buttonList[i]
-      $("#" + currFilename).append("<button id=" + currFilename + "_btn>" + currFilename + "</button>")
+      buttonInnerWords = currFilename.split("_")
+      j = 0
+      wordCount = buttonInnerWords.length - 1
+      while (j <= wordCount) {
+        buttonInnerWords[j] = buttonInnerWords[j].charAt(0).toUpperCase() + buttonInnerWords[j].slice(1)
+        if (buttonInnerWords[j] === "Dont") {
+          buttonInnerWords[j] = "Don't"
+        }
+        j += 1
+      }
+      buttonInnerText = buttonInnerWords.join(" ")
+      $("#" + currFilename).append("<button id=" + currFilename + "_btn>" + buttonInnerText + "</button>")
       sampleMaker(currFilename)
       i -= 1
     }
-    // for (i in buttonList) {
-    //   buttonInnerWords = buttonList[i].split("_")
-    //   console.log("1:", buttonList[i])
-    //   for (i in buttonInnerWords) {
-    //     buttonInnerWords[i] = buttonInnerWords[i].charAt(0).toUpperCase() + buttonInnerWords[i].slice(1)
-    //   }
-    //   buttonInnerText = buttonInnerWords.join(" ")
-    //   console.log("2:", buttonList[i])
-    //   $("#" + buttonList[i]).append("<button id=" + buttonList[i] + "_btn>" + buttonInnerText + "</button>")
-    //   sampleMaker(buttonList[i])
-    //   console.log("3:", buttonList[i])
-    // }
     $("#output_victory").html("Enjoy my words, motherfucker.")
     $("#output_victory").animate({opacity: 1}, 1000)
     enablePlayAgainButton()
