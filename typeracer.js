@@ -1,4 +1,5 @@
 // TODO: Add soundboard to victory screen
+// TODO: Change 'button_holder_win' ID attribute in order to change its styling for soundboard screen, rather than using a jQuery .css call -- that'll let styling all be in same external stylesheet
 // TODO: Add difficulty levels (increase speed at which rage increases, increase length of correct streak required to reduce rage.)
 // TODO: Add favicon
 // TODO: Add score (calculated from allLetters.length, wpm, accuracy, and difficulty bonus -- and maybe longest streak bonus) to victory screen
@@ -332,7 +333,7 @@ $(document).ready(function(){
 
   function displayReward() {
     buttonList = ['Correctimundo', 'tasty_burger', 'MuthaFucka', 'fuck_you', 'hold_on_to_your_butts',
-                  'i_dont_remember', 'please_continue', 'say_what_again', 'shut_the_fuck_up', 'tasty_beverage',
+                  "i_don't_remember", 'please_continue', 'say_what_again', 'shut_the_fuck_up', 'tasty_beverage',
                   'whats_the_matter', 'english_muthafucka']
     for (i in buttonList) {
       buttonInnerWords = buttonList[i].split("_")
@@ -346,7 +347,7 @@ $(document).ready(function(){
     $("#output_victory").html("Enjoy my words, motherfucker.")
     $("#output_victory").animate({opacity: 1}, 1000)
     enablePlayAgainButton()
-    $("#button_holder_win").css("top","70%")
+    $("#button_holder_win").css("top","60%")
     $("#button_holder_win").animate({opacity: 1}, 1000)
     $("#soundboard").animate({opacity: 1}, 1000)
   }

@@ -16,10 +16,20 @@ body {
 
 #soundboard {
   position: absolute;
-  top: 10%;
-  left: 15%;
+  top: 20%;
+  left: 3%;
   z-index: 4;
   opacity: 0;
+}
+
+#soundboard button {
+  border: 0;
+  background-color: #9966FF;
+  border-radius: 20px;
+  width: 115px;
+  height: 45px;
+  font-size: 14px;
+  color: white;  
 }
 
 #button_holder_win {
