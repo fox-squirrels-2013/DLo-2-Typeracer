@@ -1,6 +1,4 @@
-// TODO: Add hover effects to buttons
 // TODO: Add difficulty levels (increase speed at which rage increases, increase length of correct streak required to reduce rage.)
-// TODO: Add favicon
 // TODO: Add score (calculated from allLetters.length, wpm, accuracy, and difficulty bonus -- and maybe longest streak bonus) to victory screen
 // TODO: Add firebase and leaderboard, with backspace button when you enter your name
 // TODO: Make theme music loop, so it will play again after it ends for the first time
