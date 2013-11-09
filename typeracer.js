@@ -1,13 +1,13 @@
-// TODO: Allow reduction of samJackRagePoints
-// TODO: Add defeat conditions (and, temporarily, text in place of rage counter)
-// TODO: Add firebase and score (calculated from allLetters.length, wpm, and accuracy) to add leaderboard
-// TODO: Add victory screen with soundboard and play again image, and victory conditions
+// TODO: Add victory screen
 // TODO: Add defeat screen
+// TODO: Make victory/defeat screens slide in from offscreen (always rendered, high z-index)
+// TODO: Add button to play again at end
+// TODO: Add soundboard to victory screen
+// TODO: Add difficulty levels (increase speed at which rage increases, increase length of correct streak required to reduce rage. Add more flames, too?)
+// TODO: Add firebase and score (calculated from allLetters.length, wpm, and accuracy) to add leaderboard
 // TODO: Make SLJ's face move up and down a little bit at random
 // TODO: Make inactivity rage countup start a second or so more quickly, as it seemingly should?
-// TODO: Make victory/defeat screens slide in from offscreen (always rendered, high z-index)
 // TODO: Add pause button for theme song
-// TODO: Add button to play again at end
 
 $(document).ready(function(){
 
@@ -16,6 +16,8 @@ $(document).ready(function(){
   var failedAttempts = 0
   var samJackRagePoints = 0
   var secondsOfInactivityAllowed = 2
+  var streakToReduceRage = 30
+  var successStreak = 0
   var allWords = wordList[Math.floor(Math.random()*wordList.length)]
   var allLetters = allWords.split("")
 
@@ -65,23 +67,47 @@ $(document).ready(function(){
   }
 
   function successCommitted() {
+    successStreak += 1
+    if (successStreak % streakToReduceRage === 0 && samJackRagePoints > 0) {
+      samJackAngerFalls()
+    }
     correctAttempts += 1
     letterCounter += 1
     currentLetterAlreadyMissed = false
-    checkForCompletion()
+    checkForVictory()
     correctLetter = getNextLetter()
     timeOfLastSuccess = new Date()
     // do something to reduce rage counter here?
   }
 
-  function checkForCompletion() {
+  function checkForVictory() {
     if (letterCounter + 1 > allLetters.length) {
-      endTime = new Date()
-      programActive = false
       outputWPM(getTotalTime())
       outputAccuracy()
-      clearInterval(activityTimer)
+      gameOver()
+      activateVictory()
     }
+  }
+
+  function checkForDefeat() {
+    if (samJackRagePoints >= 20) {
+      gameOver()  
+      activateDefeat()
+    }
+  }
+
+  function gameOver() {
+    endTime = new Date()
+    programActive = false
+    clearInterval(activityTimer)
+  }
+
+  function activateVictory() {
+
+  }
+
+  function activateDefeat() {
+
   }
 
   function startIntro(){
@@ -107,13 +133,27 @@ $(document).ready(function(){
   }
 
   function samJackAngerGrows(sound) {
-    samJackRagePoints += 1  
+    samJackRagePoints += 1 
+    successStreak = 0 
+    checkForDefeat()
     $("#sam_jack_rage").text("Mr. Jackson's Rage Points: " + samJackRagePoints + " (if he hits 20, you lose)")    
     if (sound) {
       var samResponse = errorTriggeredAudio[Math.floor(Math.random()*errorTriggeredAudio.length)]
       sample(samResponse)
       flashLightning()
     }
+    changeImageOpacities()
+  }
+
+  function samJackAngerFalls() {
+    samJackRagePoints -= 1
+    $("#sam_jack_rage").text("Mr. Jackson's Rage Points: " + samJackRagePoints + " (if he hits 20, you lose)")
+    var samGoodResponse = successTriggeredAudio[Math.floor(Math.random()*successTriggeredAudio.length)]
+    sample(samGoodResponse)
+    changeImageOpacities()
+  }
+
+  function changeImageOpacities() {
     if (samJackRagePoints <= 10) {
       $("#sam_face").animate({opacity: (samJackRagePoints/10)}, 500)
     } else {
@@ -150,7 +190,7 @@ $(document).ready(function(){
       } else if (secondsRemaining === -1) {
         clearInterval(countdownTimer)
         $("#countdown").animate({opacity:0}, 2000)
-      } else if (secondsRemaining <= -2) {
+      } else if (secondsRemaining <= -3) {
         $("#countdown").text("")
       }
     }

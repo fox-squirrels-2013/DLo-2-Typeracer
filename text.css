@@ -3,7 +3,7 @@ body {
   font-weight: bold;
   text-align: center;
   color: white;
-  font-size: 250%;
+  font-size: 200%;
 }
 
 #lightning {
@@ -23,7 +23,7 @@ body {
 
 #sam_jack_rage {
   opacity: 0;
-  font-size: 60%;
+  font-size: 70%;
   color: #FA7202;
 }
 

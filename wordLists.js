@@ -26,6 +26,16 @@ var errorTriggeredAudio = [
 
 "please_continue",
 
-"english_mothafucka"
+"english_muthafucka",
+
+"whats_the_matter"
+
+]
+
+var successTriggeredAudio = [
+
+"Correctimundo",
+
+"tasty_burger"
 
 ]
