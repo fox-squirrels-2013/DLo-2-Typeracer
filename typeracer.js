@@ -22,6 +22,7 @@ $(document).ready(function(){
   var successStreak = 0
   var ragePointsForDefeat = 10
   var chanceStreakTriggersAudio = 0.5
+  var endGameImageSlideTime = 1.5
   var allWords = wordList[Math.floor(Math.random()*wordList.length)]
   var allLetters = allWords.split("")
 
@@ -110,8 +111,8 @@ $(document).ready(function(){
   }
 
   function activateVictory() {
-    $('#victory_img').animate({"right": "0%"}, 2000)
-    setTimeout(displayVictoryOutputs, 2000)
+    $('#victory_img').animate({"right": "0%"}, endGameImageSlideTime * 1000)
+    setTimeout(displayVictoryOutputs, endGameImageSlideTime * 1000)
   }
 
   function displayVictoryOutputs() {
@@ -123,8 +124,8 @@ $(document).ready(function(){
   }
 
   function activateDefeat() {
-    $('#defeat_img').animate({"right": "0%"}, 2000)
-    setTimeout(displayDefeatOutputs, 2000)
+    $('#defeat_img').animate({"right": "0%"}, endGameImageSlideTime * 1000)
+    setTimeout(displayDefeatOutputs, endGameImageSlideTime * 1000)
   }
 
   function displayDefeatOutputs() {
