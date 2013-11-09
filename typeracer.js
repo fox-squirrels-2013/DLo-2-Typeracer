@@ -1,5 +1,4 @@
-// TODO: Make 'play again' button disappear from victory screen at same time as other elements
-// TODO: Change 'button_holder_win' ID attribute in order to change its styling for soundboard screen, rather than using a jQuery .css call -- that'll let styling all be in same external stylesheet
+// TODO: Add hover effects to buttons
 // TODO: Add difficulty levels (increase speed at which rage increases, increase length of correct streak required to reduce rage.)
 // TODO: Add favicon
 // TODO: Add score (calculated from allLetters.length, wpm, accuracy, and difficulty bonus -- and maybe longest streak bonus) to victory screen
@@ -135,8 +134,8 @@ $(document).ready(function(){
   }
 
   function outputPlayAgainButtonWin() {
-    $("#button_holder_win").append('<button onclick="location.reload()">Play Again!</button>')
-    $("#button_holder_win").animate({opacity:1}, 1000)
+    $(".button_holder_victory").append('<button onclick="location.reload()">Play Again!</button>')
+    $(".button_holder_victory").animate({opacity:1}, 1000)
   } 
 
   function outputPlayAgainButtonLose() {
@@ -153,24 +152,25 @@ $(document).ready(function(){
   function activateReward() {
     fadeOutVictoryOutputs()
     setTimeout(removeVictoryOutputs, 500)
+    setTimeout(function(){$(".button_holder_victory").attr("id", "button_holder_win_reward")}, 520)
     setTimeout(displayReward, 600)
   }
 
   function fadeOutVictoryOutputs() {
     disablePlayAgainButton()
-    $("#button_holder_win").animate({opacity: 0}, 500)
+    $(".button_holder_victory").animate({opacity: 0}, 500)
     $("#button_holder_reward").animate({opacity: 0}, 500)
     $(".output_win").animate({opacity: 0}, 500)
   }
 
   function disablePlayAgainButton() {
-    $("#button_holder_win").html("")
-    $("#button_holder_win").append('<button>Play Again!</button>')
+    $(".button_holder_victory").html("")
+    $(".button_holder_victory").append('<button>Play Again!</button>')
   }
 
   function enablePlayAgainButton() {
-    $("#button_holder_win").html("")
-    $("#button_holder_win").append('<button onclick="location.reload()">Play Again!</button>')
+    $(".button_holder_victory").html("")
+    $(".button_holder_victory").append('<button onclick="location.reload()">Play Again!</button>')
   }
 
   function removeVictoryOutputs() {
@@ -356,8 +356,7 @@ $(document).ready(function(){
     $("#output_victory").html("Enjoy my words, motherfucker.")
     $("#output_victory").animate({opacity: 1}, 1000)
     enablePlayAgainButton()
-    $("#button_holder_win").css({"top":"20%","left":"18.5%"})
-    $("#button_holder_win").animate({opacity: 1}, 1000)
+    $("#button_holder_win_reward").animate({opacity: 1}, 1000)
     $("#soundboard").animate({opacity: 1}, 1000)
   }
 

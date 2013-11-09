@@ -42,7 +42,15 @@ body {
   opacity: 0;
 }
 
-#button_holder_win button {
+#button_holder_win_reward {
+  position: absolute;
+  left: 18.5%;
+  top: 20%;
+  z-index: 4;
+  opacity: 0;  
+}
+
+.button_holder_victory button {
   border: 0;
   background-color: #9966FF;
   border-radius: 20px;
