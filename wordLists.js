@@ -36,6 +36,10 @@ var successTriggeredAudio = [
 
 "Correctimundo",
 
-"tasty_burger"
+"tasty_burger",
+
+"tasty_beverage",
+
+"hold_on_to_your_butts"
 
 ]

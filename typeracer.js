@@ -1,12 +1,12 @@
-// TODO: Make music stop at end of game, if that feels best
-// TODO: Make sure SLJ says nice things to you even if you're at zero ragepoints
-// TODO: Add a special sound from SLJ for victory and defeat
 // TODO: Add soundboard to victory screen
 // TODO: Add difficulty levels (increase speed at which rage increases, increase length of correct streak required to reduce rage. Add more flames, too?)
-// TODO: Add firebase and score (calculated from allLetters.length, wpm, and accuracy) to add leaderboard
+// TODO: Add score (calculated from allLetters.length, wpm, accuracy, and difficulty bonus -- and maybe longest streak bonus) to victory screen
+// TODO: Add firebase and leaderboard, with backspace button when you enter your name
+// TODO: Make theme music loop, so it will play again after it ends for the first time
+// TODO: Add toggle button for theme song
+// TODO: Add a special sound from SLJ for victory and defeat
 // TODO: Make SLJ's face move up and down a little bit at random
 // TODO: Make inactivity rage countup start about a second or so more quickly, as it seemingly should?
-// TODO: Add toggle button for theme song
 
 $(document).ready(function(){
 
@@ -18,6 +18,7 @@ $(document).ready(function(){
   var streakToReduceRage = 30
   var successStreak = 0
   var ragePointsForDefeat = 10
+  var chanceStreakTriggersAudio = 0.5
   var allWords = wordList[Math.floor(Math.random()*wordList.length)]
   var allLetters = allWords.split("")
 
@@ -68,8 +69,14 @@ $(document).ready(function(){
 
   function successCommitted() {
     successStreak += 1
-    if (successStreak % streakToReduceRage === 0 && samJackRagePoints > 0) {
-      samJackAngerFalls()
+    if (successStreak % streakToReduceRage === 0) {
+      if (Math.random() <= chanceStreakTriggersAudio) {
+        var samGoodResponse = successTriggeredAudio[Math.floor(Math.random()*successTriggeredAudio.length)]
+        sample(samGoodResponse)
+      }
+      if (samJackRagePoints > 0) {
+        samJackAngerFalls()
+      }
     }
     correctAttempts += 1
     letterCounter += 1
@@ -169,8 +176,6 @@ $(document).ready(function(){
   function samJackAngerFalls() {
     samJackRagePoints -= 1
     $("#sam_jack_rage").text("Mr. Jackson's Rage Points: " + samJackRagePoints + " (if he hits " + ragePointsForDefeat + ", you lose)") 
-    var samGoodResponse = successTriggeredAudio[Math.floor(Math.random()*successTriggeredAudio.length)]
-    sample(samGoodResponse)
     changeImageOpacities()
   }
 
