@@ -1,11 +1,18 @@
-// TODO: allow reduction of samJackRagePoints
-// TODO: add pause button for theme song
-// TODO: shift text (and face) down gently instead of instantly when accuracy and wpm display
+// TODO: Add rage counter to top, in red, with note that you lose at twenty
+// TODO: Make lightning increase in size as rage grows
+// TODO: Allow reduction of samJackRagePoints
+// TODO: Add pause button for theme song
+// TODO: Shift text (and face) down gently instead of instantly when accuracy and wpm display
 // TODO: Add button to play again at end
 // TODO: Add firebase and score (calculated from allLetters.length, wpm, and accuracy) to add leaderboard
 // TODO: Add victory screen with soundboard and play again image, and victory conditions
 // TODO: Add defeat screen and conditions
 // TODO: Make SLJ's face move up and down a little bit at random
+// TODO: Change shade of purple in text?
+// TODO: Change countdown text to larger, light grey, ending on 'Type mofo'?
+// TODO: Make inactivity rage countup start a second or so more quickly, as it seemingly should?
+// TODO: Add firebase and leaderboard (and backspace button for entering your name)
+// TODO: Make victory/defeat screens slide in from offscreen (always rendered, high z-index)
 
 $(document).ready(function(){
 
