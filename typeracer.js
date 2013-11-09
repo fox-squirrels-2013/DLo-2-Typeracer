@@ -1,14 +1,15 @@
 // TODO: Add soundboard to victory screen
-// TODO: Make flames fall in opacity when appropriate
+// TODO: Add difficulty levels (increase speed at which rage increases, increase length of correct streak required to reduce rage.)
 // TODO: Add favicon
-// TODO: Add difficulty levels (increase speed at which rage increases, increase length of correct streak required to reduce rage. Add more flames, too?)
 // TODO: Add score (calculated from allLetters.length, wpm, accuracy, and difficulty bonus -- and maybe longest streak bonus) to victory screen
 // TODO: Add firebase and leaderboard, with backspace button when you enter your name
 // TODO: Make theme music loop, so it will play again after it ends for the first time
 // TODO: Add toggle button for theme song
+
 // TODO: Add a special sound from SLJ for victory and defeat
 // TODO: Make SLJ's face move up and down a little bit at random
 // TODO: Make inactivity rage countup start about a second or so more quickly, as it seemingly should?
+// TODO: Make CSS better -- things shouldn't move around screen on resize
 
 $(document).ready(function(){
 
@@ -165,12 +166,16 @@ $(document).ready(function(){
     $("#button_holder_win").append('<button>Play Again!</button>')
   }
 
+  function enablePlayAgainButton() {
+    $("#button_holder_win").html("")
+    $("#button_holder_win").append('<button onclick="location.reload()">Play Again!</button>')
+  }
+
   function removeVictoryOutputs() {
-    $("#button_holder_win").remove()
     $("#button_holder_reward").remove()
     $("#output_time").remove()
-    $("$output_accuracy").remove()
-    $("$output_victory").html("")
+    $("#output_accuracy").remove()
+    $("#output_victory").html("")
   }
 
   function startIntro(){
@@ -218,7 +223,8 @@ $(document).ready(function(){
     halfPoints = ragePointsForDefeat / 2
     if (samJackRagePoints <= (ragePointsForDefeat / 2)) {
       $("#sam_face").animate({opacity: (samJackRagePoints/halfPoints)}, 500)
-    } else {
+    } 
+    if (samJackRagePoints >= (ragePointsForDefeat / 2)) {
       $(".flames").animate({opacity: ((samJackRagePoints-halfPoints)/halfPoints)}, 500)
     }
   }
@@ -336,8 +342,11 @@ $(document).ready(function(){
       $("#" + buttonList[i]).append("<button id=" + buttonList[i] + "_btn>" + buttonInnerText + "</button>")
       sampleMaker(buttonList[i])
     }
-    $("#output_victory").html("You can use my words any day.")
+    $("#output_victory").html("Enjoy my words, motherfucker.")
     $("#output_victory").animate({opacity: 1}, 1000)
+    enablePlayAgainButton()
+    $("#button_holder_win").css("top","70%")
+    $("#button_holder_win").animate({opacity: 1}, 1000)
     $("#soundboard").animate({opacity: 1}, 1000)
   }
 
