@@ -17,7 +17,7 @@ $(document).ready(function(){
   var secondsOfInactivityAllowed = 1
   var streakToReduceRage = 30
   var successStreak = 0
-  var ragePointsForDefeat = 20
+  var ragePointsForDefeat = 10
   var allWords = wordList[Math.floor(Math.random()*wordList.length)]
   var allLetters = allWords.split("")
 
@@ -175,10 +175,11 @@ $(document).ready(function(){
   }
 
   function changeImageOpacities() {
-    if (samJackRagePoints <= 10) {
-      $("#sam_face").animate({opacity: (samJackRagePoints/10)}, 500)
+    halfPoints = ragePointsForDefeat / 2
+    if (samJackRagePoints <= (ragePointsForDefeat / 2)) {
+      $("#sam_face").animate({opacity: (samJackRagePoints/halfPoints)}, 500)
     } else {
-      $(".flames").animate({opacity: ((samJackRagePoints-10)/10)}, 500)
+      $(".flames").animate({opacity: ((samJackRagePoints-halfPoints)/halfPoints)}, 500)
     }
   }
 
@@ -269,7 +270,7 @@ $(document).ready(function(){
 
   function flashLightning() {
     lightningWidth = 940 + (samJackRagePoints * 60)
-    if (samJackRagePoints <= 10) {
+    if (samJackRagePoints <= (ragePointsForDefeat / 2)) {
       leftVal = Math.floor(Math.random()*150 - 75) + '%'
       topVal = Math.floor(Math.random()*120 - 60) + '%'
     } else {
