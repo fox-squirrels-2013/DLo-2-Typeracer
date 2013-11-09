@@ -34,7 +34,7 @@ body {
 
 #button_holder_lose {
   position: absolute;
-  left: 23%;
+  left: 22%;
   top: 21%;
   z-index: 4;
   opacity: 0;
