@@ -6,6 +6,14 @@ body {
   font-size: 200%;
 }
 
+#victory_img {
+  position: absolute;
+  width: 100%;
+  height: auto;
+  right: 100%;
+  z-index: 3;
+}
+
 #lightning {
   position: absolute;
   z-index: -2;
@@ -32,12 +40,24 @@ body {
   color: yellow;
 }
 
-#output_time {
+.output {
   opacity: 0;
+  z-index: 4;
+  position: absolute;
+  left: 5%;  
+  color: black;
+}
+
+#output_victory {
+  top: 12%;
+}
+
+#output_time {
+  top: 20%;
 }
 
 #output_accuracy {
-  opacity: 0;
+  top: 28%;
 }
 
 #sam_face {

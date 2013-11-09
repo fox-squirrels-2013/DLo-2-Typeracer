@@ -1,7 +1,6 @@
-// TODO: Add victory screen
 // TODO: Add defeat screen
-// TODO: Make victory/defeat screens slide in from offscreen (always rendered, high z-index)
 // TODO: Add button to play again at end
+// TODO: Make sure SLJ says nice things to you even if you're at zero ragepoints
 // TODO: Add soundboard to victory screen
 // TODO: Add difficulty levels (increase speed at which rage increases, increase length of correct streak required to reduce rage. Add more flames, too?)
 // TODO: Add firebase and score (calculated from allLetters.length, wpm, and accuracy) to add leaderboard
@@ -77,13 +76,10 @@ $(document).ready(function(){
     checkForVictory()
     correctLetter = getNextLetter()
     timeOfLastSuccess = new Date()
-    // do something to reduce rage counter here?
   }
 
   function checkForVictory() {
     if (letterCounter + 1 > allLetters.length) {
-      outputWPM(getTotalTime())
-      outputAccuracy()
       gameOver()
       activateVictory()
     }
@@ -103,7 +99,14 @@ $(document).ready(function(){
   }
 
   function activateVictory() {
+    $('#victory_img').animate({"right": "0%"}, 2000)
+    setTimeout(displayVictoryOutputs, 2000)
+  }
 
+  function displayVictoryOutputs() {
+    outputWPM(getTotalTime())
+    outputAccuracy() 
+    outputVictoryStatement()   
   }
 
   function activateDefeat() {
@@ -218,6 +221,11 @@ $(document).ready(function(){
     var accuracy = correctAttempts / (correctAttempts + failedAttempts)
     $("#output_accuracy").html("Your Accuracy: " + (Math.round(accuracy * 100 * 100)/100) + '%')
     $("#output_accuracy").animate({opacity:1}, 500)
+  }
+
+  function outputVictoryStatement() {
+    $("#output_victory").html("Congratulations -- you win!")
+    $("#output_victory").animate({opacity:1}, 500)
   }
   
   function themeSong() {
