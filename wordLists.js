@@ -18,12 +18,24 @@ var wordList = [
 
 var errorTriggeredAudio = [
 
-"Short Say What",
+"short_say_what",
 
-"Tasty Burger",
+"fuck_you",
 
 "MuthaFucka",
 
-"Correctimundo"
+"please_continue",
+
+"english_muthafucka",
+
+"whats_the_matter"
+
+]
+
+var successTriggeredAudio = [
+
+"Correctimundo",
+
+"tasty_burger"
 
 ]

@@ -1,11 +1,12 @@
-// TODO: allow reduction of samJackRagePoints
-// TODO: add pause button for theme song
-// TODO: shift text (and face) down gently instead of instantly when accuracy and wpm display
-// TODO: Add button to play again at end
+// TODO: Make music stop at end of game, if that feels best
+// TODO: Make sure SLJ says nice things to you even if you're at zero ragepoints
+// TODO: Add a special sound from SLJ for victory and defeat
+// TODO: Add soundboard to victory screen
+// TODO: Add difficulty levels (increase speed at which rage increases, increase length of correct streak required to reduce rage. Add more flames, too?)
 // TODO: Add firebase and score (calculated from allLetters.length, wpm, and accuracy) to add leaderboard
-// TODO: Add victory screen with soundboard and play again image, and victory conditions
-// TODO: Add defeat screen and conditions
 // TODO: Make SLJ's face move up and down a little bit at random
+// TODO: Make inactivity rage countup start about a second or so more quickly, as it seemingly should?
+// TODO: Add toggle button for theme song
 
 $(document).ready(function(){
 
@@ -13,7 +14,10 @@ $(document).ready(function(){
   var correctAttempts = 0
   var failedAttempts = 0
   var samJackRagePoints = 0
-  var secondsOfInactivityAllowed = 2
+  var secondsOfInactivityAllowed = 1
+  var streakToReduceRage = 30
+  var successStreak = 0
+  var ragePointsForDefeat = 10
   var allWords = wordList[Math.floor(Math.random()*wordList.length)]
   var allLetters = allWords.split("")
 
@@ -42,7 +46,7 @@ $(document).ready(function(){
     var enteredLetter = String.fromCharCode(enteredLetterCode)
     if ((enteredLetter === correctLetter) && programActive) {
       if (letterCounter === 0) {
-        allLetters[letterCounter] = "<span style='color:purple;'>" + allLetters[letterCounter] + "</span>"
+        allLetters[letterCounter] = "<span style='color:#C377F2;'>" + allLetters[letterCounter] + "</span>"
       } else {
         allLetters[letterCounter - 1] = allLetters[letterCounter - 1].slice(0,(allLetters[letterCounter - 1].length - 7)) // removes "</span>"
         allLetters[letterCounter] = allLetters[letterCounter] + "</span>"
@@ -63,23 +67,68 @@ $(document).ready(function(){
   }
 
   function successCommitted() {
+    successStreak += 1
+    if (successStreak % streakToReduceRage === 0 && samJackRagePoints > 0) {
+      samJackAngerFalls()
+    }
     correctAttempts += 1
     letterCounter += 1
     currentLetterAlreadyMissed = false
-    checkForCompletion()
+    checkForVictory()
     correctLetter = getNextLetter()
     timeOfLastSuccess = new Date()
-    // do something to reduce rage counter here?
   }
 
-  function checkForCompletion() {
+  function checkForVictory() {
     if (letterCounter + 1 > allLetters.length) {
-      endTime = new Date()
-      programActive = false
-      outputWPM(getTotalTime())
-      outputAccuracy()
-      clearInterval(activityTimer)
+      gameOver()
+      activateVictory()
     }
+  }
+
+  function checkForDefeat() {
+    if (samJackRagePoints >= ragePointsForDefeat) {
+      gameOver()  
+      activateDefeat()
+    }
+  }
+
+  function gameOver() {
+    endTime = new Date()
+    programActive = false
+    clearInterval(activityTimer)
+  }
+
+  function activateVictory() {
+    $('#victory_img').animate({"right": "0%"}, 2000)
+    setTimeout(displayVictoryOutputs, 2000)
+  }
+
+  function displayVictoryOutputs() {
+    outputWPM(getTotalTime())
+    outputAccuracy() 
+    outputVictoryStatement()
+    outputPlayAgainButtonWin()   
+  }
+
+  function activateDefeat() {
+    $('#defeat_img').animate({"right": "0%"}, 2000)
+    setTimeout(displayDefeatOutputs, 2000)
+  }
+
+  function displayDefeatOutputs() {
+    outputDefeatStatement()
+    outputPlayAgainButtonLose()  
+  }
+
+  function outputPlayAgainButtonWin() {
+    $("#button_holder_win").append('<button onclick="location.reload()">Play Again!</button>')
+    $("#button_holder_win").animate({opacity:1}, 2000)
+  } 
+
+  function outputPlayAgainButtonLose() {
+    $("#button_holder_lose").append('<button onclick="location.reload()">Play Again!</button>')
+    $("#button_holder_lose").animate({opacity:1}, 2000)   
   }
 
   function startIntro(){
@@ -105,22 +154,40 @@ $(document).ready(function(){
   }
 
   function samJackAngerGrows(sound) {
-    samJackRagePoints += 1  
+    samJackRagePoints += 1 
+    successStreak = 0 
+    checkForDefeat()
+    $("#sam_jack_rage").text("Mr. Jackson's Rage Points: " + samJackRagePoints + " (if he hits " + ragePointsForDefeat + ", you lose)")    
     if (sound) {
       var samResponse = errorTriggeredAudio[Math.floor(Math.random()*errorTriggeredAudio.length)]
       sample(samResponse)
       flashLightning()
     }
-    if (samJackRagePoints <= 10) {
-      $("#sam_face").animate({opacity: (samJackRagePoints/10)}, 500)
+    changeImageOpacities()
+  }
+
+  function samJackAngerFalls() {
+    samJackRagePoints -= 1
+    $("#sam_jack_rage").text("Mr. Jackson's Rage Points: " + samJackRagePoints + " (if he hits " + ragePointsForDefeat + ", you lose)") 
+    var samGoodResponse = successTriggeredAudio[Math.floor(Math.random()*successTriggeredAudio.length)]
+    sample(samGoodResponse)
+    changeImageOpacities()
+  }
+
+  function changeImageOpacities() {
+    halfPoints = ragePointsForDefeat / 2
+    if (samJackRagePoints <= (ragePointsForDefeat / 2)) {
+      $("#sam_face").animate({opacity: (samJackRagePoints/halfPoints)}, 500)
     } else {
-      $(".flames").animate({opacity: ((samJackRagePoints-10)/10)}, 500)
+      $(".flames").animate({opacity: ((samJackRagePoints-halfPoints)/halfPoints)}, 500)
     }
   }
 
   function displayText() {
     $("#text_to_type").text(allWords)
     $("#text_to_type").animate({opacity:1}, 2000)
+    $("#sam_jack_rage").text("Mr. Jackson's Rage Points: " + samJackRagePoints + " (if he hits " + ragePointsForDefeat + ", you lose)") 
+    $("#sam_jack_rage").animate({opacity:1}, 2000)
   }
 
   function displaySamJack() {
@@ -140,12 +207,12 @@ $(document).ready(function(){
       if (secondsRemaining >= 1) {
         $("#countdown").text(secondsRemaining + "...")
       } else if (secondsRemaining === 0) {
-        $("#countdown").text("Go!")
+        $("#countdown").text("Type, motherfucker!")
         launchProgram()
       } else if (secondsRemaining === -1) {
         clearInterval(countdownTimer)
-        $("#countdown").animate({opacity:0}, 1000)
-      } else if (secondsRemaining <= -2) {
+        $("#countdown").animate({opacity:0}, 2000)
+      } else if (secondsRemaining <= -3) {
         $("#countdown").text("")
       }
     }
@@ -174,6 +241,11 @@ $(document).ready(function(){
     $("#output_accuracy").html("Your Accuracy: " + (Math.round(accuracy * 100 * 100)/100) + '%')
     $("#output_accuracy").animate({opacity:1}, 500)
   }
+
+  function outputVictoryStatement() {
+    $("#output_victory").html("Congratulations -- you win!")
+    $("#output_victory").animate({opacity:1}, 500)
+  }
   
   function themeSong() {
     var sample = document.createElement('audio')
@@ -191,12 +263,23 @@ $(document).ready(function(){
     sample.setAttribute('autoplay','autoplay')
   }
 
+  function outputDefeatStatement() {
+    $("#output_defeat").html("GAME OVER -- YOU LOST!")
+    $("#output_defeat").animate({opacity:1}, 500) 
+  }
+
   function flashLightning() {
-    leftVal = Math.floor(Math.random()*1100-500) + 'px'
-    topVal = Math.floor(Math.random()*1100-500) + 'px'
+    lightningWidth = 940 + (samJackRagePoints * 60)
+    if (samJackRagePoints <= (ragePointsForDefeat / 2)) {
+      leftVal = Math.floor(Math.random()*150 - 75) + '%'
+      topVal = Math.floor(Math.random()*120 - 60) + '%'
+    } else {
+      leftVal = Math.floor(Math.random()*100 - 50) + '%'
+      topVal = Math.floor(Math.random()*80 - 40) + '%'
+    }
     $('#lightning').css("left",leftVal)
     $('#lightning').css("top",topVal)
-    $('#lightning').append("<img src='sj_pics/lightning.jpg' style='width:1000px; height:auto;'>")
+    $('#lightning').append("<img src='sj_pics/lightning.jpg' style='width:" + lightningWidth + "px; height:auto;'>")
     setTimeout(function(){$('#lightning').html("")}, 100)
   }
 
