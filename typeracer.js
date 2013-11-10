@@ -1,8 +1,13 @@
-// TODO: Add firebase and leaderboard, with backspace button when you enter your name (consider having a special victory screen come up if you get a high score -- would simply matters!)
-// TODO: Add 'view leaderboard' button to opening page
-// TODO: Make score and accompanying leaderboard button persist on reward page
-// TODO: Add toggle button for theme song (Daniel E already built in an event listener and id for this)
-// TODO: Use CSS trick I used on difficulty page text to fix up text on victory, defeat screens, perhaps even in-game typing screen
+// TODO: Create a fake 'top scores' list and seed it
+// TODO: Create a top scores page, with button from opening page
+// TODO: Use a conditional in activateVictory to give user correct page (high score or normal victory)
+// TODO: Create new text for victory screen that displays if and only if your score is a top score
+// TODO: Let this new 'high score' victory screen take input from you for your name; will need 'submit' button and 'backspace' button. Submission can lead to high score page.
+// TODO: Integrate Firebase to make the leaderboard real
+// TODO: Change spellings to 'Muthaphukka'
+// TODO: Add toggle button for theme song (Daniel E already built in an event listener and id for this) 
+// TODO: Use CSS trick I used on difficulty page text to fix up text on victory, defeat screens, perhaps even in-game typing screen (both for text and face/flame images)
+// TODO: Check to ensure that visitor is using Chrome. If they aren't, only show them a page that tells them to download it and come back.
 
 // TODO: Make CSS better -- things shouldn't move around screen on window resize
 // TODO: Make the intro animation fade in from black
@@ -20,6 +25,9 @@ $(document).ready(function(){
   var secondsOfInactivityAllowed = 1
   var streakToReduceRage = 30
   var successStreak = 0
+  var score = 0
+  var accuracy = 0
+  var wpm = 0
   var longestSuccessStreak = 0
   var ragePointsForDefeat = 10
   var chanceStreakTriggersAudio = 0.5
@@ -165,12 +173,13 @@ $(document).ready(function(){
 
   function activateVictory() {
     $('#victory_img').animate({"right": "0%"}, secondsEndGameScreenSlideTime * 1000)
+    calculateScore(getTotalTime())
     setTimeout(displayVictoryOutputs, secondsEndGameScreenSlideTime * 1000)
   }
 
   function displayVictoryOutputs() {
     outputVictoryStatement()
-    outputScore(getTotalTime()) 
+    outputScore() 
     $(".output_win").animate({opacity:1}, 500)
     outputPlayAgainButtonWin()
     outputRewardButton()   
@@ -331,11 +340,14 @@ $(document).ready(function(){
     return endTime - startTime
   }
 
-  function outputScore(totalTime){
-    var wpm = Math.round(((letterCounter + 1)/5)/(totalTime/1000/60)*100)/100
-    var accuracy = correctAttempts / (correctAttempts + failedAttempts)
-    var score = Math.round(difficultyMultiplier * (wpm * accuracy + allLetters.length + longestSuccessStreak))
-    $("#output_line_1").html("WPM: " + wpm + "; Accuracy: " + (Math.round(accuracy * 100 * 100)/100) + '%')
+  function calculateScore(totalTime) {
+    wpm = Math.round(((letterCounter + 1)/5.5)/(totalTime/1000/60)*100)/100
+    accuracy = correctAttempts / (correctAttempts + failedAttempts)
+    score = Math.round(difficultyMultiplier * (wpm * accuracy + allLetters.length + longestSuccessStreak))
+  }
+
+  function outputScore() {
+    $("#output_line_1").html("WPM: " + wpm)
     $("#output_line_2").html("Longest Streak: " + longestSuccessStreak)
     $("#output_line_3").append("Your Score: " + "<em style='color:#9966FF'>" + score + "</em>")
   }
