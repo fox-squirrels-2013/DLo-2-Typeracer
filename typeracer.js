@@ -1,11 +1,10 @@
-// TODO: Add a small amount to very beginning of intro animation, so that it fades in from black
-// TODO: Don't start music until intro starts
 // TODO: Add score (calculated from allLetters.length, wpm, accuracy, and difficulty bonus -- and maybe longest streak bonus) to victory screen
 // TODO: Add firebase and leaderboard, with backspace button when you enter your name
-// TODO: Make theme music loop, so it will play again after it ends for the first time
-// TODO: Add toggle button for theme song
+// TODO: Add toggle button for theme song (Daniel E already built in an event listener and id for this)
+// TODO: Use CSS trick I used on difficulty page text to fix up text on victory, defeat screens, perhaps even in-game typing screen
 
 // TODO: Make CSS better -- things shouldn't move around screen on window resize
+// TODO: Make the intro animation fade in from black
 // TODO: Try using input button elements instead of button elements, to see if we can get rid of the highlight box that appears
 // TODO: Add a special sound from SLJ for victory and defeat
 // TODO: Make SLJ's face move up and down a little bit at random
@@ -52,18 +51,18 @@ $(document).ready(function(){
 
   $(".difficulty_button_holder button").on("click", function(){
     fadeOutStartElements()
-    setTimeout(removeStartElements, 2000)
-    setTimeout(function(){$("body").toggleClass('intro')}, 2000)
-    setTimeout(startIntro, 2000)
+    setTimeout(removeStartElements, 1500)
+    setTimeout(function(){$("body").toggleClass('intro')}, 1500)
+    setTimeout(startIntro, 1500)
   })
 
   function fadeOutStartElements() {
     $("#welcome_box").animate({opacity: 0, "left":"100%"}, 1000)
-    setTimeout(function(){$("#easy_holder").animate({opacity: 0, "left":"130%"}, 1000)}, 200)
-    setTimeout(function(){$("#normal_holder").animate({opacity: 0, "left":"130%"}, 1000)}, 400)
-    setTimeout(function(){$("#hard_holder").animate({opacity: 0, "left":"130%"}, 1000)}, 600)
-    setTimeout(function(){$("#insane_holder").animate({opacity: 0, "left":"130%"}, 1000)}, 800)
-    setTimeout(function(){$("#created_by_box").animate({opacity: 0, "left":"115%"}, 1000)}, 1000)
+    setTimeout(function(){$("#easy_holder").animate({opacity: 0, "left":"130%"}, 1000)}, 100)
+    setTimeout(function(){$("#normal_holder").animate({opacity: 0, "left":"130%"}, 1000)}, 200)
+    setTimeout(function(){$("#hard_holder").animate({opacity: 0, "left":"130%"}, 1000)}, 300)
+    setTimeout(function(){$("#insane_holder").animate({opacity: 0, "left":"130%"}, 1000)}, 400)
+    setTimeout(function(){$("#created_by_box").animate({opacity: 0, "left":"115%"}, 1000)}, 500)
   }
 
   function removeStartElements() {
@@ -80,7 +79,7 @@ $(document).ready(function(){
 
   var currentLetterAlreadyMissed = false
 
-  var activityTimer = setInterval(checkForInactivity, 50) // (secondsOfInactivityAllowed * 1000))
+  var activityTimer = setInterval(checkForInactivity, 50)
 
   var correctLetter = getNextLetter()
 
@@ -225,6 +224,7 @@ $(document).ready(function(){
   }
 
   function startIntro(){
+    themeSong().play()
     var introSecondsRemaining = parseInt($("body").css("-webkit-animation-duration"), 10)
     var introTimer = setInterval(timer, 1000)
     function timer(){
@@ -342,11 +342,11 @@ $(document).ready(function(){
   function themeSong() {
     var sample = document.createElement('audio')
     sample.setAttribute('src', 'audio/sammyltheme.m4a')
-    sample.setAttribute('autoplay','autoplay')
-
+    sample.loop = true
     $('#themesong').click(function() {
         sample.pause()
     })
+    return sample
   }
 
   function sample(audiofile) {
