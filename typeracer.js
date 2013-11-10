@@ -1,5 +1,4 @@
-// TODO: Create a fake 'top scores' list and seed it
-// TODO: Create a top scores page, with button from opening page
+// TODO: Implement fadeIn and fadeOut functions for leaderboard
 // TODO: Use a conditional in activateVictory to give user correct page (high score or normal victory)
 // TODO: Create new text for victory screen that displays if and only if your score is a top score
 // TODO: Let this new 'high score' victory screen take input from you for your name; will need 'submit' button and 'backspace' button. Submission can lead to high score page.
@@ -35,6 +34,9 @@ $(document).ready(function(){
   var difficultyMultiplier
   var allWords = wordList[Math.floor(Math.random()*wordList.length)]
   var allLetters = allWords.split("")
+  var topScores = [['Nobody', 1000], ['Nobody', 1000], ['Nobody', 1000], ['Nobody', 1000],
+                   ['Nobody', 1000], ['Nobody', 1000], ['Nobody', 1000], ['Nobody', 1000],
+                   ['Nobody', 1000], ['Nobody', 1000]]
 
   $("#easy_holder").on("click", function(){
     secondsOfInactivityAllowed = 2
@@ -66,10 +68,35 @@ $(document).ready(function(){
 
   $(".difficulty_button_holder button").on("click", function(){
     fadeOutStartElements()
-    setTimeout(removeStartElements, 1500)
-    setTimeout(function(){$("body").toggleClass('intro')}, 1500)
-    setTimeout(startIntro, 1500)
+    removeLeaderboard()
+    setTimeout(removeStartElements, 1600)
+    setTimeout(function(){$("body").toggleClass('intro')}, 1600)
+    setTimeout(startIntro, 1600)
   })
+
+  $("#show_leaderboard_holder button").on("click", function(){
+    fadeOutStartElements()
+    setTimeout(fadeInLeaderboard, 800)
+  })
+
+  function fadeInLeaderboard() {
+    $("#leaderboard_welcome").html("Top Muthaphukkas")
+    $("#home_button_holder").html('<button>Return Home</button>')
+    $("#home_button_holder button").on("click",returnToStartElements)
+    $("#leaderboard_welcome").animate({opacity: 1, "top":"5%"}, 1000)
+    setTimeout(function(){$("#home_button_holder").animate({opacity: 1, "top":"74%"}, 1000)}, 100)
+    // IMPLEMENTING: this is where the top scores need to pop up, along with a title and 'return to main page' button
+  }
+
+  function fadeOutLeaderboard() {
+    $("#home_button_holder").animate({opacity: 0, "top":"174%"}, 1000)
+    setTimeout(function(){$("#leaderboard_welcome").animate({opacity: 0, "top":"105%"}, 1000)}, 100)
+    // IMPLEMENTING
+  }
+
+  function removeLeaderboard() {
+    $(".leaderboard").remove()
+  }
 
   function fadeOutStartElements() {
     $("#welcome_box").animate({opacity: 0, "left":"100%"}, 1000)
@@ -77,12 +104,29 @@ $(document).ready(function(){
     setTimeout(function(){$("#normal_holder").animate({opacity: 0, "left":"130%"}, 1000)}, 200)
     setTimeout(function(){$("#hard_holder").animate({opacity: 0, "left":"130%"}, 1000)}, 300)
     setTimeout(function(){$("#insane_holder").animate({opacity: 0, "left":"130%"}, 1000)}, 400)
-    setTimeout(function(){$("#created_by_box").animate({opacity: 0, "left":"115%"}, 1000)}, 500)
+    setTimeout(function(){$("#show_leaderboard_holder").animate({opacity: 0, "left":"130%"}, 1000)}, 500)
+    setTimeout(function(){$("#created_by_box").animate({opacity: 0, "left":"115%"}, 1000)}, 600)
+  }
+
+  function returnToStartElements() {
+    fadeOutLeaderboard()
+    setTimeout(fadeInStartElements, 200)
+  }
+
+  function fadeInStartElements() {
+    $("#welcome_box").animate({opacity: 1, "left":"15%"}, 1000)
+    setTimeout(function(){$("#easy_holder").animate({opacity: 1, "left":"44.5%"}, 1000)}, 100)
+    setTimeout(function(){$("#normal_holder").animate({opacity: 1, "left":"44.5%"}, 1000)}, 200)
+    setTimeout(function(){$("#hard_holder").animate({opacity: 1, "left":"44.5%"}, 1000)}, 300)
+    setTimeout(function(){$("#insane_holder").animate({opacity: 1, "left":"44.5%"}, 1000)}, 400)
+    setTimeout(function(){$("#show_leaderboard_holder").animate({opacity: 1, "left":"44.5%"}, 1000)}, 500)
+    setTimeout(function(){$("#created_by_box").animate({opacity: 1, "left":"35%"}, 1000)}, 600)
   }
 
   function removeStartElements() {
     $("#welcome_box").remove()
     $(".difficulty_button_holder").remove()
+    $("#show_leaderboard_holder").remove()
     $("#created_by_box").remove()
   }
 

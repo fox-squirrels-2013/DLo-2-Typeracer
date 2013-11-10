@@ -25,29 +25,36 @@ body {
   opacity: 1;
 }
 
+#show_leaderboard_holder {
+  position: absolute;
+  opacity: 1;
+  top: 74%;
+  left: 44.5%;
+}
+
 #easy_holder {
-  top: 20%;
-  left: 45%;
+  top: 18%;
+  left: 44.5%;
 }
 
 #normal_holder {
-  top: 35%;
-  left: 45%;
+  top: 32%;
+  left: 44.5%;
 }
 
 #hard_holder {
-  top: 50%;
-  left: 45%;
+  top: 46%;
+  left: 44.5%;
 }
 
 #insane_holder {
-  top: 65%;
-  left: 45%;
+  top: 60%;
+  left: 44.5%;
 }
 
 #created_by_box {
   position: absolute;
-  top: 85%;
+  top: 90%;
   width: 30%;
   left: 35%;
   font-size: 12pt;
@@ -59,7 +66,7 @@ body {
   border: 0;
   background-color: red;
   border-radius: 20px;
-  width: 100px;
+  width: 110px;
   height: 30px;
   font-size: 16px;
   color: black;
@@ -67,6 +74,51 @@ body {
 
 .difficulty_button_holder button:hover {
   background-color: #FF8080;
+}
+
+#show_leaderboard_holder button {
+  border: 0;
+  background-color: #6FAA6F;
+  border-radius: 20px;
+  width: 110px;
+  height: 30px;
+  font-size: 16px;
+  color: black;
+}
+
+#show_leaderboard_holder button:hover {
+  background-color: #A3D1A3;
+}
+
+#leaderboard_welcome {
+  opacity: 0;
+  position: absolute;
+  width: 70%;
+  left: 15%;
+  top: 105%;
+  color: red;
+  font-size: 20pt;
+}
+
+#home_button_holder {
+  position: absolute;
+  opacity: 0;
+  top: 174%;
+  left: 44%;
+}
+
+#home_button_holder button {
+  border: 0;
+  background-color: #6FAA6F;
+  border-radius: 20px;
+  width: 130px;
+  height: 30px;
+  font-size: 16px;
+  color: black;
+}
+
+#home_button_holder button:hover {
+  background-color: #A3D1A3;
 }
 
 .intro {
