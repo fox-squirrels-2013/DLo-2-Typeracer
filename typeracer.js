@@ -363,11 +363,11 @@ $(document).ready(function(){
       if (secondsRemaining >= 1) {
         $("#countdown").text(secondsRemaining + "...")
       } else if (secondsRemaining === 0) {
-        $("#countdown").text("Type, motherfucker!")
+        $("#countdown").text("Type, muthaphukka!")
         launchProgram()
       } else if (secondsRemaining === -1) {
         clearInterval(countdownTimer)
-        $("#countdown").animate({opacity:0}, 2000)
+        $("#countdown").animate({opacity:0}, 500)
       } else if (secondsRemaining <= -3) {
         $("#countdown").text("")
       }
@@ -437,9 +437,9 @@ $(document).ready(function(){
   }
 
   function displayReward() {
-    buttonList = ['correctimundo', 'tasty_burger', 'motherfucker', 'fuck_you', 'hold_on_to_your_butts', 
+    buttonList = ['correctimundo', 'tasty_burger', 'muthaphukka', 'fuck_you', 'hold_on_to_your_butts', 
                   "i_dont_remember", 'please_continue', 'say_what_again', 'shut_the_fuck_up', 'tasty_beverage',
-                  'whats_the_matter', 'english_motherfucker']
+                  'whats_the_matter', 'english_muthaphukka']
     i = buttonList.length - 1
     while (i >= 0) {
       currFilename = buttonList[i]
@@ -458,7 +458,7 @@ $(document).ready(function(){
       sampleMaker(currFilename)
       i -= 1
     }
-    $("#output_victory").html("Partake of my words, motherfucker.")
+    $("#output_victory").html("Partake of my words, muthapukka.")
     $("#output_victory").animate({opacity: 1}, 1000)
     enablePlayAgainButton()
     $("#button_holder_win_reward").animate({opacity: 1}, 1000)

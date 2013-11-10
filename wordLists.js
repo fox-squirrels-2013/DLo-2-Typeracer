@@ -24,7 +24,7 @@ var errorTriggeredAudio = [
 
 "fuck_you",
 
-"motherfucker",
+"muthaphukka",
 
 "please_continue",
 
