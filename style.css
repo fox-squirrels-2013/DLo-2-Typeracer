@@ -119,7 +119,7 @@ body {
   position: absolute;
   width: 40%;
   height: auto;
-  top: 29%;
+  top: 34%;
   left: 3%;
   z-index: 4;
   opacity: 0;
@@ -141,8 +141,8 @@ body {
 
 #button_holder_win {
   position: absolute;
-  left: 15%;
-  top: 35%;
+  left: 19%;
+  top: 43%;
   z-index: 4;
   opacity: 0;
 }
@@ -150,7 +150,7 @@ body {
 #button_holder_win_reward {
   position: absolute;
   left: 18.5%;
-  top: 20%;
+  top: 25%;
   z-index: 4;
   opacity: 0;  
 }
@@ -171,8 +171,8 @@ body {
 
 #button_holder_reward {
   position: absolute;
-  left: 12.5%;
-  top: 43%;
+  left: 16.5%;
+  top: 51%;
   z-index: 4;
   opacity: 0;
 }
@@ -243,7 +243,8 @@ body {
   opacity: 0;
   z-index: 4;
   position: absolute;
-  left: 5%;  
+  left: 0%;  
+  width: 45%;
   color: black;
 }
 
@@ -251,12 +252,16 @@ body {
   top: 12%;
 }
 
-#output_time {
+#output_line_1 {
   top: 20%;
 }
 
-#output_accuracy {
+#output_line_2 {
   top: 28%;
+}
+
+#output_line_3 {
+  top: 36%;
 }
 
 .output_lose {

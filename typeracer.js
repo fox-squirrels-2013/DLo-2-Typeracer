@@ -1,5 +1,6 @@
-// TODO: Add score (calculated from allLetters.length, wpm, accuracy, and difficulty bonus -- and maybe longest streak bonus) to victory screen
 // TODO: Add firebase and leaderboard, with backspace button when you enter your name
+// TODO: Add 'view leaderboard' button to opening page
+// TODO: Make score and accompanying leaderboard button persist to reward page
 // TODO: Add toggle button for theme song (Daniel E already built in an event listener and id for this)
 // TODO: Use CSS trick I used on difficulty page text to fix up text on victory, defeat screens, perhaps even in-game typing screen
 
@@ -19,9 +20,11 @@ $(document).ready(function(){
   var secondsOfInactivityAllowed = 1
   var streakToReduceRage = 30
   var successStreak = 0
+  var longestSuccessStreak = 0
   var ragePointsForDefeat = 10
   var chanceStreakTriggersAudio = 0.5
   var secondsEndGameScreenSlideTime = 1.5
+  var difficultyMultiplier
   var allWords = wordList[Math.floor(Math.random()*wordList.length)]
   var allLetters = allWords.split("")
 
@@ -29,24 +32,28 @@ $(document).ready(function(){
     secondsOfInactivityAllowed = 2
     streakToReduceRage = 20
     ragePointsForDefeat = 20
+    difficultyMultiplier = 1
   })
 
   $("#normal_holder").on("click", function(){
     secondsOfInactivityAllowed = 1.5
     streakToReduceRage = 30
     ragePointsForDefeat = 20
+    difficultyMultiplier = 2
   })
 
   $("#hard_holder").on("click", function(){
     secondsOfInactivityAllowed = 1
     streakToReduceRage = 30
     ragePointsForDefeat = 10
+    difficultyMultiplier = 3
   })
 
   $("#insane_holder").on("click", function(){
     secondsOfInactivityAllowed = 0.2
     streakToReduceRage = 40
     ragePointsForDefeat = 10
+    difficultyMultiplier = 4
   })
 
   $(".difficulty_button_holder button").on("click", function(){
@@ -116,6 +123,9 @@ $(document).ready(function(){
 
   function successCommitted() {
     successStreak += 1
+    if (successStreak > longestSuccessStreak) {
+      longestSuccessStreak = successStreak
+    }
     if (successStreak % streakToReduceRage === 0) {
       if (Math.random() <= chanceStreakTriggersAudio) {
         var samGoodResponse = successTriggeredAudio[Math.floor(Math.random()*successTriggeredAudio.length)]
@@ -159,9 +169,9 @@ $(document).ready(function(){
   }
 
   function displayVictoryOutputs() {
-    outputWPM(getTotalTime())
-    outputAccuracy() 
     outputVictoryStatement()
+    outputScore(getTotalTime()) 
+    $(".output_win").animate({opacity:1}, 500)
     outputPlayAgainButtonWin()
     outputRewardButton()   
   }
@@ -218,8 +228,9 @@ $(document).ready(function(){
 
   function removeVictoryOutputs() {
     $("#button_holder_reward").remove()
-    $("#output_time").remove()
-    $("#output_accuracy").remove()
+    $("#output_line_1").remove()
+    $("#output_line_2").remove()
+    $("#output_line_3").remove()    
     $("#output_victory").html("")
   }
 
@@ -313,8 +324,6 @@ $(document).ready(function(){
   function launchProgram() {
     startTime = new Date()
     programActive = true
-    /* if we allow player to play again without refreshing,
-       will need to reinitialize multiple variables here */
     timeOfLastSuccess = new Date()
   }
 
@@ -322,21 +331,17 @@ $(document).ready(function(){
     return endTime - startTime
   }
 
-  function outputWPM(totalTime) {
-    var wpm = Math.round(((letterCounter + 1)/5)/(totalTime/1000/60)*100)/100;
-    $("#output_time").html("Your WPM: " + wpm)
-    $("#output_time").animate({opacity:1}, 500)
-  }
-
-  function outputAccuracy() {
+  function outputScore(totalTime){
+    var wpm = Math.round(((letterCounter + 1)/5)/(totalTime/1000/60)*100)/100
     var accuracy = correctAttempts / (correctAttempts + failedAttempts)
-    $("#output_accuracy").html("Your Accuracy: " + (Math.round(accuracy * 100 * 100)/100) + '%')
-    $("#output_accuracy").animate({opacity:1}, 500)
+    var score = Math.round(difficultyMultiplier * (wpm * accuracy + allLetters.length + longestSuccessStreak))
+    $("#output_line_1").html("WPM: " + wpm + "; Accuracy: " + (Math.round(accuracy * 100 * 100)/100) + '%')
+    $("#output_line_2").html("Longest Streak: " + longestSuccessStreak)
+    $("#output_line_3").append("Your Score: " + "<em style='color:#9966FF'>" + score + "</em>")
   }
 
   function outputVictoryStatement() {
     $("#output_victory").html("Congratulations -- you win!")
-    $("#output_victory").animate({opacity:1}, 500)
   }
   
   function themeSong() {
@@ -397,7 +402,7 @@ $(document).ready(function(){
       sampleMaker(currFilename)
       i -= 1
     }
-    $("#output_victory").html("Enjoy my words, motherfucker.")
+    $("#output_victory").html("Partake of my words, motherfucker.")
     $("#output_victory").animate({opacity: 1}, 1000)
     enablePlayAgainButton()
     $("#button_holder_win_reward").animate({opacity: 1}, 1000)
