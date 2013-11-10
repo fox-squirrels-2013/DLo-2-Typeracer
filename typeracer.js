@@ -1,6 +1,6 @@
-// TODO: Add firebase and leaderboard, with backspace button when you enter your name
+// TODO: Add firebase and leaderboard, with backspace button when you enter your name (consider having a special victory screen come up if you get a high score -- would simply matters!)
 // TODO: Add 'view leaderboard' button to opening page
-// TODO: Make score and accompanying leaderboard button persist to reward page
+// TODO: Make score and accompanying leaderboard button persist on reward page
 // TODO: Add toggle button for theme song (Daniel E already built in an event listener and id for this)
 // TODO: Use CSS trick I used on difficulty page text to fix up text on victory, defeat screens, perhaps even in-game typing screen
 
