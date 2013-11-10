@@ -1,4 +1,3 @@
-// TODO: Add difficulty levels (increase speed at which rage increases, increase length of correct streak required to reduce rage.)
 // TODO: Add a small amount to very beginning of intro animation, so that it fades in from black
 // TODO: Don't start music until intro starts
 // TODO: Add score (calculated from allLetters.length, wpm, accuracy, and difficulty bonus -- and maybe longest streak bonus) to victory screen
@@ -27,26 +26,26 @@ $(document).ready(function(){
   var allWords = wordList[Math.floor(Math.random()*wordList.length)]
   var allLetters = allWords.split("")
 
-  $("easy").on("click", function(){
+  $("#easy_holder").on("click", function(){
     secondsOfInactivityAllowed = 2
     streakToReduceRage = 20
     ragePointsForDefeat = 20
   })
 
-  $("normal").on("click", function(){
+  $("#normal_holder").on("click", function(){
     secondsOfInactivityAllowed = 1.5
     streakToReduceRage = 30
     ragePointsForDefeat = 20
   })
 
-  $("hard").on("click", function(){
+  $("#hard_holder").on("click", function(){
     secondsOfInactivityAllowed = 1
     streakToReduceRage = 30
     ragePointsForDefeat = 10
   })
 
-  $("insane").on("click", function(){
-    secondsOfInactivityAllowed = 0.1
+  $("#insane_holder").on("click", function(){
+    secondsOfInactivityAllowed = 0.2
     streakToReduceRage = 40
     ragePointsForDefeat = 10
   })
@@ -81,7 +80,7 @@ $(document).ready(function(){
 
   var currentLetterAlreadyMissed = false
 
-  var activityTimer = setInterval(checkForInactivity, (secondsOfInactivityAllowed * 1000))
+  var activityTimer = setInterval(checkForInactivity, 50) // (secondsOfInactivityAllowed * 1000))
 
   var correctLetter = getNextLetter()
 
@@ -243,6 +242,7 @@ $(document).ready(function(){
   function checkForInactivity() {
     if (programActive && (((new Date() - timeOfLastSuccess)/1000) >= secondsOfInactivityAllowed)) {
       samJackAngerGrows(false)
+      timeOfLastSuccess = new Date()
     }
   }
 
