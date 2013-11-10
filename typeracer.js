@@ -3,6 +3,7 @@
 // TODO: Add firebase and leaderboard, with backspace button when you enter your name
 // TODO: Make theme music loop, so it will play again after it ends for the first time
 // TODO: Add toggle button for theme song
+// TODO: Try using input button elements instead of button elements, to see if I can get rid of the highlight box that appears
 
 // TODO: Add a special sound from SLJ for victory and defeat
 // TODO: Make SLJ's face move up and down a little bit at random
@@ -10,6 +11,13 @@
 // TODO: Make CSS better -- things shouldn't move around screen on resize
 
 $(document).ready(function(){
+
+  $("#test_button").on("click", function(event){
+    event.preventDefault()
+    alert('clicked!');
+    $("body").toggleClass('intro')
+    startIntro()
+  })
 
   var letterCounter = 0
   var correctAttempts = 0
@@ -31,8 +39,6 @@ $(document).ready(function(){
   var programActive = false
 
   var currentLetterAlreadyMissed = false
-
-  startIntro()
 
   var activityTimer = setInterval(checkForInactivity, (secondsOfInactivityAllowed * 1000))
 
@@ -179,12 +185,11 @@ $(document).ready(function(){
   }
 
   function startIntro(){
-    introDuration = parseInt($("body").css("-webkit-animation-duration"), 10)
-    var secondsRemaining = introDuration
+    var introSecondsRemaining = parseInt($("body").css("-webkit-animation-duration"), 10)
     var introTimer = setInterval(timer, 1000)
     function timer(){
-      secondsRemaining -= 1
-      if (secondsRemaining === 0) {
+      introSecondsRemaining -= 1
+      if (introSecondsRemaining === 0) {
         clearInterval(introTimer)
         displayText()
         displaySamJack()

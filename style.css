@@ -1,9 +1,55 @@
 body {
+  background-color: black;
+  background-size: 100%; 
+  background-repeat: no-repeat; 
   font-family: Tahoma, Geneva, sans-serif;
   font-weight: bold;
   text-align: center;
   color: white;
   font-size: 200%;
+}
+
+#test_button {
+  position: absolute;
+  top: 10%;
+  left: 10%;
+}
+
+.intro {
+  -webkit-animation-name: intro;
+  -webkit-animation-duration: 4s;
+  -webkit-animation-timing-function: linear;
+}
+
+@-webkit-keyframes intro {
+  0% {
+    background-image: url('sj_pics/sj_start.jpg');
+    background-repeat: none;  
+  }
+  20% {
+    background-image: url('sj_pics/sj_mouth_open.jpg');
+    background-repeat: none;  
+  }
+  40% {
+    background-image: url('sj_pics/sj_mouth_open_eyes_red.jpg');
+    background-repeat: none;  
+  }
+  
+  60%{
+    background-image: url('sj_pics/sj_zoom_1.jpg');
+    background-repeat: none;  
+
+  }
+
+  80% {
+    background-image: url('sj_pics/sj_zoom_2.jpg');
+    background-repeat: none;  
+  }
+  
+  100% {
+    background-image: url('sj_pics/sj_zoom_3.jpg');
+    background-repeat: none;  
+  }
 }
 
 .game_end_img {
