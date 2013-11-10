@@ -1,23 +1,18 @@
 // TODO: Add difficulty levels (increase speed at which rage increases, increase length of correct streak required to reduce rage.)
+// TODO: Add a small amount to very beginning of intro animation, so that it fades in from black
+// TODO: Don't start music until intro starts
 // TODO: Add score (calculated from allLetters.length, wpm, accuracy, and difficulty bonus -- and maybe longest streak bonus) to victory screen
 // TODO: Add firebase and leaderboard, with backspace button when you enter your name
 // TODO: Make theme music loop, so it will play again after it ends for the first time
 // TODO: Add toggle button for theme song
-// TODO: Try using input button elements instead of button elements, to see if I can get rid of the highlight box that appears
 
+// TODO: Make CSS better -- things shouldn't move around screen on window resize
+// TODO: Try using input button elements instead of button elements, to see if we can get rid of the highlight box that appears
 // TODO: Add a special sound from SLJ for victory and defeat
 // TODO: Make SLJ's face move up and down a little bit at random
 // TODO: Make inactivity rage countup start about a second or so more quickly, as it seemingly should?
-// TODO: Make CSS better -- things shouldn't move around screen on resize
 
 $(document).ready(function(){
-
-  $("#test_button").on("click", function(event){
-    event.preventDefault()
-    alert('clicked!');
-    $("body").toggleClass('intro')
-    startIntro()
-  })
 
   var letterCounter = 0
   var correctAttempts = 0
@@ -31,6 +26,52 @@ $(document).ready(function(){
   var secondsEndGameScreenSlideTime = 1.5
   var allWords = wordList[Math.floor(Math.random()*wordList.length)]
   var allLetters = allWords.split("")
+
+  $("easy").on("click", function(){
+    secondsOfInactivityAllowed = 2
+    streakToReduceRage = 20
+    ragePointsForDefeat = 20
+  })
+
+  $("normal").on("click", function(){
+    secondsOfInactivityAllowed = 1.5
+    streakToReduceRage = 30
+    ragePointsForDefeat = 20
+  })
+
+  $("hard").on("click", function(){
+    secondsOfInactivityAllowed = 1
+    streakToReduceRage = 30
+    ragePointsForDefeat = 10
+  })
+
+  $("insane").on("click", function(){
+    secondsOfInactivityAllowed = 0.1
+    streakToReduceRage = 40
+    ragePointsForDefeat = 10
+  })
+
+  $(".difficulty_button_holder button").on("click", function(){
+    fadeOutStartElements()
+    setTimeout(removeStartElements, 2000)
+    setTimeout(function(){$("body").toggleClass('intro')}, 2000)
+    setTimeout(startIntro, 2000)
+  })
+
+  function fadeOutStartElements() {
+    $("#welcome_box").animate({opacity: 0, "left":"100%"}, 1000)
+    setTimeout(function(){$("#easy_holder").animate({opacity: 0, "left":"130%"}, 1000)}, 200)
+    setTimeout(function(){$("#normal_holder").animate({opacity: 0, "left":"130%"}, 1000)}, 400)
+    setTimeout(function(){$("#hard_holder").animate({opacity: 0, "left":"130%"}, 1000)}, 600)
+    setTimeout(function(){$("#insane_holder").animate({opacity: 0, "left":"130%"}, 1000)}, 800)
+    setTimeout(function(){$("#created_by_box").animate({opacity: 0, "left":"115%"}, 1000)}, 1000)
+  }
+
+  function removeStartElements() {
+    $("#welcome_box").remove()
+    $(".difficulty_button_holder").remove()
+    $("#created_by_box").remove()
+  }
 
   function getNextLetter() {
     return allLetters[letterCounter] 

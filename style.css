@@ -9,10 +9,64 @@ body {
   font-size: 200%;
 }
 
-#test_button {
+#welcome_box {
+  position: absolute;
+  width: 70%;
+  left: 15%;
+  top: 5%;
+  color: red;
+  font-size: 24pt;
+  opacity: 1;
+}
+
+.difficulty_button_holder {
   position: absolute;
   top: 10%;
-  left: 10%;
+  opacity: 1;
+}
+
+#easy_holder {
+  top: 20%;
+  left: 45%;
+}
+
+#normal_holder {
+  top: 35%;
+  left: 45%;
+}
+
+#hard_holder {
+  top: 50%;
+  left: 45%;
+}
+
+#insane_holder {
+  top: 65%;
+  left: 45%;
+}
+
+#created_by_box {
+  position: absolute;
+  top: 85%;
+  width: 30%;
+  left: 35%;
+  font-size: 12pt;
+  color: red;
+  opacity: 1;
+}
+
+.difficulty_button_holder button {
+  border: 0;
+  background-color: red;
+  border-radius: 20px;
+  width: 100px;
+  height: 30px;
+  font-size: 16px;
+  color: black;
+}
+
+.difficulty_button_holder button:hover {
+  background-color: #FF8080;
 }
 
 .intro {
@@ -22,6 +76,7 @@ body {
 }
 
 @-webkit-keyframes intro {
+
   0% {
     background-image: url('sj_pics/sj_start.jpg');
     background-repeat: none;  
