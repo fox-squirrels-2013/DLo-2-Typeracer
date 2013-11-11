@@ -1,6 +1,6 @@
-// TODO: Integrate Firebase to make the leaderboard real
+// TODO: Remove Firebase entries for users whose score is no longer top 10
 // TODO: Add toggle button for theme song (Daniel E already built in an event listener and id for this) 
-// TODO: Check to ensure that visitor is using Chrome. If they aren't, only show them a page that tells them to download it and come back.
+// TODO: Check to ensure that visitor is using Chrome. If they aren't, suggest they download it; the page may hardly work on other browsers.
 // TODO: Use CSS trick I used on difficulty page text to fix up text on victory, defeat screens, perhaps even in-game typing screen (both for text and face/flame images)
 
 // TODO: Make CSS better -- things shouldn't move around screen on window resize
@@ -29,11 +29,11 @@ $(document).ready(function(){
   var highScoreInputTime = false
   var highScoreUserInput = ''
   var difficultyMultiplier
+  var scoreToBeat
   var allWords = wordList[Math.floor(Math.random()*wordList.length)]
   var allLetters = allWords.split("")
-  var topScores = [['Nobody', 1000], ['Nobody', 1000], ['Nobody', 1000], ['Nobody', 1000],
-                   ['Nobody', 1000], ['Nobody', 1000], ['Nobody', 1000], ['Nobody', 1000],
-                   ['Nobody', 1000], ['Nobody', 100]]
+  topScores = new Firebase('https://theoriginalsljtyperacer.firebaseIO.com/')
+  var topScoresView = topScores.startAt().limit(10)
 
   $("#easy_holder").on("click", function(){
     secondsOfInactivityAllowed = 2
@@ -78,11 +78,19 @@ $(document).ready(function(){
 
   function fadeInLeaderboard() {
     $("#leaderboard_welcome").html("Top Muthaphukkas")
-    var i = 1
-    while (i <= 10) {
-      $("#leader_" + i).html((topScores[i-1].join(" - ")))
-      i += 1
-    }
+    topScoresView.on('value', function(snapshot) {
+      var scoreList = snapshot.val()
+      // The four lines below are no longer necessary -- data is now ordered
+      // for (var name in scoreList) {
+      //   var currRef = new Firebase('https://theoriginalsljtyperacer.firebaseio.com/' + name)
+      //   currRef.setPriority(1/scoreList[name])
+      // }
+      var i = 1
+      for (var entry in scoreList) {
+        $("#leader_" + i).html(scoreList[entry].name + " - " + scoreList[entry].score)
+        i += 1
+      }
+    })
     $("#home_button_holder").html('<button>Return Home</button>')
     $("#home_button_holder button").on("click",returnToStartElements)
     $("#leaderboard_welcome").animate({opacity: 1, "top":"5%"}, 1000)
@@ -235,9 +243,10 @@ $(document).ready(function(){
   }
 
   function activateVictory() {
-    $('#victory_img').animate({"right": "0%"}, secondsEndGameScreenSlideTime * 1000)
     calculateScore(getTotalTime())
-    if (score > topScores[9][1]) {
+    $('#victory_img').animate({"right": "0%"}, secondsEndGameScreenSlideTime * 1000)
+    console.log('score:', score, ' scoreToBeat:', scoreToBeat)
+    if (score > scoreToBeat) {
       setTimeout(displayHighScoreOutputs, secondsEndGameScreenSlideTime * 1000)
     } else {
       setTimeout(displayVictoryOutputs, secondsEndGameScreenSlideTime * 1000)
@@ -294,17 +303,27 @@ $(document).ready(function(){
     highScoreInputTime = false
     var i = 0
     var doneLooping = false
-    var indexOfNewScore = 9
-    while (i <= 8 && !(doneLooping)) {
-      if (score > topScores[i][1]) {
-        indexOfNewScore = i
-        doneLooping = true
-      }
-      i += 1
+    var characters = [0,1,2,3,4,5,6,7,8,9,'a','b','c','d','e','f','g','h','i','j','k','l','m',
+                      'n','o','p','q','r','s','t','u','v','w','x','y','z','A','B','C','D','E',
+                      'F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W',
+                      'X','Y','Z']
+    var randURLEnding = ''
+    for (var i = 0; i <= 11; i++) {
+      randURLEnding += characters[Math.floor(Math.random() * characters.length)]
     }
-    newEntry = [[highScoreUserInput, score]]
-    topScores = topScores.slice(0, indexOfNewScore).concat(newEntry).concat(topScores.slice(indexOfNewScore))
-    topScores.pop()
+    var newRef = new Firebase('https://theoriginalsljtyperacer.firebaseIO.com/' + randURLEnding)
+    newRef.setWithPriority({name: highScoreUserInput, score: score}, 1/score)
+    // var indexOfNewScore = 9
+    // while (i <= 8 && !(doneLooping)) {
+    //   if (score > topScores[i][1]) {
+    //     indexOfNewScore = i
+    //     doneLooping = true
+    //   }
+    //   i += 1
+    // }
+    // newEntry = [[highScoreUserInput, score]]
+    // topScores = topScores.slice(0, indexOfNewScore).concat(newEntry).concat(topScores.slice(indexOfNewScore))
+    // topScores.pop()
     fadeOutHighScoreOutputs()
     setTimeout(removeHighScoreOutputs, 500)
     setTimeout(function(){$(".button_holder_victory").append('<button>Play Again!</button>')}, 510)
@@ -384,8 +403,23 @@ $(document).ready(function(){
     $("#output_victory").html("")
   }
 
+  function checkCurrentScoreToBeat() {
+    topScoresView.on('value', function(snapshot) {
+      var scoreList = snapshot.val()
+      var i = 1
+      for (var entry in scoreList) {
+        if (i === 10) {
+          scoreToBeat = scoreList[entry].score
+          console.log(scoreToBeat)
+        }
+        i += 1
+      }
+    })
+  }
+
   function startIntro(){
     themeSong().play()
+    checkCurrentScoreToBeat()
     var introSecondsRemaining = parseInt($("body").css("-webkit-animation-duration"), 10)
     var introTimer = setInterval(timer, 1000)
     function timer(){
