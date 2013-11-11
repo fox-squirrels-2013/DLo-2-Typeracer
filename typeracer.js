@@ -80,11 +80,6 @@ $(document).ready(function(){
     $("#leaderboard_welcome").html("Top Muthaphukkas")
     topScoresView.on('value', function(snapshot) {
       var scoreList = snapshot.val()
-      // The four lines below are no longer necessary -- data is now ordered
-      // for (var name in scoreList) {
-      //   var currRef = new Firebase('https://theoriginalsljtyperacer.firebaseio.com/' + name)
-      //   currRef.setPriority(1/scoreList[name])
-      // }
       var i = 1
       for (var entry in scoreList) {
         $("#leader_" + i).html(scoreList[entry].name + " - " + scoreList[entry].score)
@@ -313,17 +308,6 @@ $(document).ready(function(){
     }
     var newRef = new Firebase('https://theoriginalsljtyperacer.firebaseIO.com/' + randURLEnding)
     newRef.setWithPriority({name: highScoreUserInput, score: score}, 1/score)
-    // var indexOfNewScore = 9
-    // while (i <= 8 && !(doneLooping)) {
-    //   if (score > topScores[i][1]) {
-    //     indexOfNewScore = i
-    //     doneLooping = true
-    //   }
-    //   i += 1
-    // }
-    // newEntry = [[highScoreUserInput, score]]
-    // topScores = topScores.slice(0, indexOfNewScore).concat(newEntry).concat(topScores.slice(indexOfNewScore))
-    // topScores.pop()
     fadeOutHighScoreOutputs()
     setTimeout(removeHighScoreOutputs, 500)
     setTimeout(function(){$(".button_holder_victory").append('<button>Play Again!</button>')}, 510)
@@ -410,7 +394,6 @@ $(document).ready(function(){
       for (var entry in scoreList) {
         if (i === 10) {
           scoreToBeat = scoreList[entry].score
-          console.log(scoreToBeat)
         }
         i += 1
       }
