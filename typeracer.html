@@ -1,31 +1,75 @@
 <!DOCTYPE html>
 <html>
 <head>
+<link rel="icon" 
+      type="image/png" 
+      href="sj_pics/sj_face.png">
+<link rel="stylesheet" href="style.css">
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-<audio autoplay>
-  <source src="./audio/sammyltheme.m4a">
-</audio>
-<link rel="stylesheet" href="typeracer.css">
-<link rel="stylesheet" href="text.css">
+<script src='https://cdn.firebase.com/v0/firebase.js'></script>
 <script src="wordLists.js"></script>
 <script src="typeracer.js"></script>
+<title>The Original SLJ Typeracer</title>
 </head>
 
 <body class="stop_scrolling">
-  <div id="button_holder_win"></div>
+
+  <div id="welcome_box">The Original Samuel L Jackson Typeracer</div>
+  <div class="difficulty_button_holder" id="easy_holder"><button id="easy">Easy</button></div>
+  <div class="difficulty_button_holder" id="normal_holder"><button id="normal">Normal</button></div>
+  <div class="difficulty_button_holder" id="hard_holder"><button id="hard">Hard</button></div>
+  <div class="difficulty_button_holder" id="insane_holder"><button id="insane">Insane</button></div>
+  <div id="show_leaderboard_holder"><button id="show_leaderboard">Top Scores</button></div>
+  <div id="created_by_box">Created by Team (D-Lo)^2</div>
+
+  <div class="leaderboard" id="leaderboard_welcome"></div>
+  <div class="leaderboard_val" id="leader_1"></div>
+  <div class="leaderboard_val" id="leader_2"></div>
+  <div class="leaderboard_val" id="leader_3"></div>
+  <div class="leaderboard_val" id="leader_4"></div>
+  <div class="leaderboard_val" id="leader_5"></div>
+  <div class="leaderboard_val" id="leader_6"></div>
+  <div class="leaderboard_val" id="leader_7"></div>
+  <div class="leaderboard_val" id="leader_8"></div>
+  <div class="leaderboard_val" id="leader_9"></div>
+  <div class="leaderboard_val" id="leader_10"></div>
+  <div class="leaderboard" id="home_button_holder"></div>
+
+  <div id="button_holder_win" class="button_holder_victory"></div>
+  <div id="button_holder_reward"></div>
   <div id="button_holder_lose"></div>
+  <div id="button_holder_backspace"></div>
+  <div id="button_holder_submit"></div>
   <img id="victory_img" class="game_end_img" src="sj_pics/sj_win.jpg">
   <img id="defeat_img" class="game_end_img" src="sj_pics/sj_lose.jpg">
   <div class="flames" id="flame_one"></div>
   <div class="flames" id="flame_two"></div>
   <div id="sam_jack_rage"></div>  
-  <div class="output_win" id="output_time"></div>
-  <div class="output_win" id="output_accuracy"></div>
+  <div class="output_win" id="output_line_1"></div>
+  <div class="output_win" id="output_line_2"></div>
+  <div class="output_win" id="output_line_3"></div>
+  <div id="user_input_line"></div>
   <div class="output_win" id="output_victory"></div>
   <div class="output_lose" id="output_defeat"></div>
   <div id="text_to_type"></div>
   <div id="lightning"></div>
   <div id="countdown"></div>
   <div id="sam_face"></div>
+
+  <div id="soundboard">
+    <span id="correctimundo"></span>
+    <span id="muthaphukka"></span>
+    <span id="fuck_you"></span>
+    <span id="tasty_burger"></span>
+    <span id="hold_on_to_your_butts"></span>
+    <span id="i_dont_remember"></span>
+    <span id="please_continue"></span>
+    <span id="say_what_again"></span>
+    <span id="shut_the_fuck_up"></span>
+    <span id="tasty_beverage"></span>
+    <span id="whats_the_matter"></span>
+    <span id="english_muthaphukka"></span>
+  </div>
+
 </body>
 </html>

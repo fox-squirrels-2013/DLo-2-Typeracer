@@ -1,12 +1,14 @@
-// TODO: Make music stop at end of game, if that feels best
-// TODO: Make sure SLJ says nice things to you even if you're at zero ragepoints
+// TODO: Remove Firebase entries for users whose score is no longer top 10
+// TODO: Add toggle button for theme song (Daniel E already built in an event listener and id for this) 
+// TODO: Check to ensure that visitor is using Chrome. If they aren't, suggest they download it; the page may hardly work on other browsers.
+// TODO: Use CSS trick I used on difficulty page text to fix up text on victory, defeat screens, perhaps even in-game typing screen (both for text and face/flame images)
+
+// TODO: Make CSS better -- things shouldn't move around screen on window resize
+// TODO: Make the intro animation fade in from black
+// TODO: Try using input button elements instead of button elements, to see if we can get rid of the highlight box that appears
 // TODO: Add a special sound from SLJ for victory and defeat
-// TODO: Add soundboard to victory screen
-// TODO: Add difficulty levels (increase speed at which rage increases, increase length of correct streak required to reduce rage. Add more flames, too?)
-// TODO: Add firebase and score (calculated from allLetters.length, wpm, and accuracy) to add leaderboard
-// TODO: Make SLJ's face move up and down a little bit at random
+// TODO: Make SLJ's face move up and down a little bit at random during game
 // TODO: Make inactivity rage countup start about a second or so more quickly, as it seemingly should?
-// TODO: Add toggle button for theme song
 
 $(document).ready(function(){
 
@@ -17,9 +19,134 @@ $(document).ready(function(){
   var secondsOfInactivityAllowed = 1
   var streakToReduceRage = 30
   var successStreak = 0
+  var score = 0
+  var accuracy = 0
+  var wpm = 0
+  var longestSuccessStreak = 0
   var ragePointsForDefeat = 10
+  var chanceStreakTriggersAudio = 0.5
+  var secondsEndGameScreenSlideTime = 1.5
+  var highScoreInputTime = false
+  var highScoreUserInput = ''
+  var difficultyMultiplier
+  var scoreToBeat
   var allWords = wordList[Math.floor(Math.random()*wordList.length)]
   var allLetters = allWords.split("")
+  topScores = new Firebase('https://theoriginalsljtyperacer.firebaseIO.com/')
+  var topScoresView = topScores.startAt().limit(10)
+
+  $("#easy_holder").on("click", function(){
+    secondsOfInactivityAllowed = 2
+    streakToReduceRage = 20
+    ragePointsForDefeat = 20
+    difficultyMultiplier = 1
+  })
+
+  $("#normal_holder").on("click", function(){
+    secondsOfInactivityAllowed = 1.5
+    streakToReduceRage = 30
+    ragePointsForDefeat = 20
+    difficultyMultiplier = 2
+  })
+
+  $("#hard_holder").on("click", function(){
+    secondsOfInactivityAllowed = 1
+    streakToReduceRage = 30
+    ragePointsForDefeat = 10
+    difficultyMultiplier = 3
+  })
+
+  $("#insane_holder").on("click", function(){
+    secondsOfInactivityAllowed = 0.2
+    streakToReduceRage = 40
+    ragePointsForDefeat = 10
+    difficultyMultiplier = 4
+  })
+
+  $(".difficulty_button_holder button").on("click", function(){
+    fadeOutStartElements()
+    removeLeaderboard()
+    setTimeout(removeStartElements, 1600)
+    setTimeout(function(){$("body").toggleClass('intro')}, 1600)
+    setTimeout(startIntro, 1600)
+  })
+
+  $("#show_leaderboard_holder button").on("click", function(){
+    fadeOutStartElements()
+    setTimeout(fadeInLeaderboard, 800)
+  })
+
+  function fadeInLeaderboard() {
+    $("#leaderboard_welcome").html("Top Muthaphukkas")
+    topScoresView.on('value', function(snapshot) {
+      var scoreList = snapshot.val()
+      var i = 1
+      for (var entry in scoreList) {
+        $("#leader_" + i).html(scoreList[entry].name + " - " + scoreList[entry].score)
+        i += 1
+      }
+    })
+    $("#home_button_holder").html('<button>Return Home</button>')
+    $("#home_button_holder button").on("click",returnToStartElements)
+    $("#leaderboard_welcome").animate({opacity: 1, "top":"5%"}, 1000)
+    var j = 1
+    setTimeout(function() {
+      while (j <= 10) {
+        $("#leader_" + j).animate({opacity: 1, "top":((7 * j + 7) + "%")}, 1000)
+        j += 1
+      }
+    }, 100)
+    setTimeout(function(){$("#home_button_holder").animate({opacity: 1, "top":"85%"}, 1000)}, 200)
+  }
+
+  function fadeOutLeaderboard() {
+    $("#home_button_holder").animate({opacity: 0, "top":"174%"}, 1000)
+    var j = 10
+    setTimeout(function() {
+      while (j >= 1) {
+        $("#leader_" + j).animate({opacity: 0, "top":((7 * j + 107) + "%")}, 1000)
+        j -= 1
+      }
+    }, 100)
+    setTimeout(function(){$("#leaderboard_welcome").animate({opacity: 0, "top":"105%"}, 1000)}, 200)
+  }
+
+  function removeLeaderboard() {
+    $(".leaderboard").remove()
+    $(".leaderboard_val").remove()
+  }
+
+  function fadeOutStartElements() {
+    $("#welcome_box").animate({opacity: 0, "left":"100%"}, 1000)
+    setTimeout(function(){$("#easy_holder").animate({opacity: 0, "left":"130%"}, 1000)}, 100)
+    setTimeout(function(){$("#normal_holder").animate({opacity: 0, "left":"130%"}, 1000)}, 200)
+    setTimeout(function(){$("#hard_holder").animate({opacity: 0, "left":"130%"}, 1000)}, 300)
+    setTimeout(function(){$("#insane_holder").animate({opacity: 0, "left":"130%"}, 1000)}, 400)
+    setTimeout(function(){$("#show_leaderboard_holder").animate({opacity: 0, "left":"130%"}, 1000)}, 500)
+    setTimeout(function(){$("#created_by_box").animate({opacity: 0, "left":"115%"}, 1000)}, 600)
+  }
+
+  function returnToStartElements() {
+    fadeOutLeaderboard()
+    setTimeout(fadeInStartElements, 200)
+  }
+
+  function fadeInStartElements() {
+    $("#welcome_box").animate({opacity: 1, "left":"15%"}, 1000)
+    setTimeout(function(){$("#easy_holder").animate({opacity: 1, "left":"44.5%"}, 1000)}, 100)
+    setTimeout(function(){$("#normal_holder").animate({opacity: 1, "left":"44.5%"}, 1000)}, 200)
+    setTimeout(function(){$("#hard_holder").animate({opacity: 1, "left":"44.5%"}, 1000)}, 300)
+    setTimeout(function(){$("#insane_holder").animate({opacity: 1, "left":"44.5%"}, 1000)}, 400)
+    setTimeout(function(){$("#show_leaderboard_holder").animate({opacity: 1, "left":"44.5%"}, 1000)}, 500)
+    setTimeout(function(){$("#created_by_box").animate({opacity: 1, "left":"35%"}, 1000)}, 600)
+  }
+
+  function removeStartElements() {
+    $("#welcome_box").remove()
+    $(".difficulty_button_holder").remove()
+    $("#show_leaderboard_holder").remove()
+    $("#created_by_box").remove()
+  }
 
   function getNextLetter() {
     return allLetters[letterCounter] 
@@ -29,9 +156,7 @@ $(document).ready(function(){
 
   var currentLetterAlreadyMissed = false
 
-  startIntro()
-
-  var activityTimer = setInterval(checkForInactivity, (secondsOfInactivityAllowed * 1000))
+  var activityTimer = setInterval(checkForInactivity, 50)
 
   var correctLetter = getNextLetter()
 
@@ -44,6 +169,10 @@ $(document).ready(function(){
   $(document).keypress(function(event) {
     var enteredLetterCode = event.keyCode
     var enteredLetter = String.fromCharCode(enteredLetterCode)
+    if (highScoreInputTime === true && highScoreUserInput.length <= 16) {
+      highScoreUserInput += enteredLetter
+      $("#user_input_line").html(highScoreUserInput)
+    }
     if ((enteredLetter === correctLetter) && programActive) {
       if (letterCounter === 0) {
         allLetters[letterCounter] = "<span style='color:#C377F2;'>" + allLetters[letterCounter] + "</span>"
@@ -68,8 +197,17 @@ $(document).ready(function(){
 
   function successCommitted() {
     successStreak += 1
-    if (successStreak % streakToReduceRage === 0 && samJackRagePoints > 0) {
-      samJackAngerFalls()
+    if (successStreak > longestSuccessStreak) {
+      longestSuccessStreak = successStreak
+    }
+    if (successStreak % streakToReduceRage === 0) {
+      if (Math.random() <= chanceStreakTriggersAudio) {
+        var samGoodResponse = successTriggeredAudio[Math.floor(Math.random()*successTriggeredAudio.length)]
+        sample(samGoodResponse)
+      }
+      if (samJackRagePoints > 0) {
+        samJackAngerFalls()
+      }
     }
     correctAttempts += 1
     letterCounter += 1
@@ -100,20 +238,100 @@ $(document).ready(function(){
   }
 
   function activateVictory() {
-    $('#victory_img').animate({"right": "0%"}, 2000)
-    setTimeout(displayVictoryOutputs, 2000)
+    calculateScore(getTotalTime())
+    $('#victory_img').animate({"right": "0%"}, secondsEndGameScreenSlideTime * 1000)
+    console.log('score:', score, ' scoreToBeat:', scoreToBeat)
+    if (score > scoreToBeat) {
+      setTimeout(displayHighScoreOutputs, secondsEndGameScreenSlideTime * 1000)
+    } else {
+      setTimeout(displayVictoryOutputs, secondsEndGameScreenSlideTime * 1000)
+    }
   }
 
   function displayVictoryOutputs() {
-    outputWPM(getTotalTime())
-    outputAccuracy() 
     outputVictoryStatement()
-    outputPlayAgainButtonWin()   
+    outputScore() 
+    $(".output_win").animate({opacity:1}, 500)
+    outputPlayAgainButtonWin()
+    outputRewardButton()   
+  }
+
+  function displayHighScoreOutputs() {
+    outputHighScoreStatement()
+    outputScoreWhenHigh()
+    $(".output_win").animate({opacity:1}, 500)
+    $("#user_input_line").animate({opacity:1}, 500)
+    setTimeout(function(){highScoreInputTime = true}, 500)
+    outputBackspaceButton()
+    outputSubmitScoreButton()
+  }
+
+  function fadeOutHighScoreOutputs() {
+    $(".output_win").animate({opacity:0}, 500)
+    $("#user_input_line").animate({opacity:0}, 500)
+    $("#button_holder_backspace").animate({opacity:0}, 500)
+    $("#button_holder_submit").animate({opacity:0}, 500)
+  }
+
+  function removeHighScoreOutputs() {
+    $("#button_holder_backspace").remove()
+    $("#button_holder_submit").remove()
+    $("#output_line_1").remove()
+    $("#output_line_2").remove()
+    $("#output_line_3").remove() 
+    $("#user_input_line").remove()  
+  }
+
+  function outputBackspaceButton() {
+    $("#button_holder_backspace").append('<button id="backspace">Backspace</button>')
+    $("#backspace").click(userInputBackspace)
+    $("#button_holder_backspace").animate({opacity:1}, 500)
+  }
+
+  function outputSubmitScoreButton() {
+    $("#button_holder_submit").append('<button id="submit">Submit</button>')
+    $("#submit").click(userInputSubmit)
+    $("#button_holder_submit").animate({opacity:1}, 500)
+  }
+
+  function userInputSubmit() {
+    highScoreInputTime = false
+    var i = 0
+    var doneLooping = false
+    var characters = [0,1,2,3,4,5,6,7,8,9,'a','b','c','d','e','f','g','h','i','j','k','l','m',
+                      'n','o','p','q','r','s','t','u','v','w','x','y','z','A','B','C','D','E',
+                      'F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W',
+                      'X','Y','Z']
+    var randURLEnding = ''
+    for (var i = 0; i <= 11; i++) {
+      randURLEnding += characters[Math.floor(Math.random() * characters.length)]
+    }
+    var newRef = new Firebase('https://theoriginalsljtyperacer.firebaseIO.com/' + randURLEnding)
+    newRef.setWithPriority({name: highScoreUserInput, score: score}, 1/score)
+    fadeOutHighScoreOutputs()
+    setTimeout(removeHighScoreOutputs, 500)
+    setTimeout(function(){$(".button_holder_victory").append('<button>Play Again!</button>')}, 510)
+    setTimeout(function(){$(".button_holder_victory").attr("id", "button_holder_win_reward")}, 520) 
+    setTimeout(displayReward, 600)
+  }
+
+  function userInputBackspace() {
+    highScoreUserInput = highScoreUserInput.slice(0, highScoreUserInput.length-1)
+    $("#user_input_line").html(highScoreUserInput)
+  }
+
+  function userInputAddKeystroke(character) {
+    highScoreUserInput += character
+    $("#user_input_line").html(highScoreUserInput)
+  }
+
+  function outputHighScoreStatement() {
+    $("#output_victory").append("<em style='color:#9966FF'>High score, muthaphukka!</em>")
   }
 
   function activateDefeat() {
-    $('#defeat_img').animate({"right": "0%"}, 2000)
-    setTimeout(displayDefeatOutputs, 2000)
+    $('#defeat_img').animate({"right": "0%"}, secondsEndGameScreenSlideTime * 1000)
+    setTimeout(displayDefeatOutputs, secondsEndGameScreenSlideTime * 1000)
   }
 
   function displayDefeatOutputs() {
@@ -122,22 +340,74 @@ $(document).ready(function(){
   }
 
   function outputPlayAgainButtonWin() {
-    $("#button_holder_win").append('<button onclick="location.reload()">Play Again!</button>')
-    $("#button_holder_win").animate({opacity:1}, 2000)
+    $(".button_holder_victory").append('<button onclick="location.reload()">Play Again!</button>')
+    $(".button_holder_victory").animate({opacity:1}, 1000)
   } 
 
   function outputPlayAgainButtonLose() {
     $("#button_holder_lose").append('<button onclick="location.reload()">Play Again!</button>')
-    $("#button_holder_lose").animate({opacity:1}, 2000)   
+    $("#button_holder_lose").animate({opacity:1}, 1000)   
+  }
+
+  function outputRewardButton() {
+    $("#button_holder_reward").append('<button id="reward_button">I\'d like my reward, Mr. Jackson.</button>')
+    $("#reward_button").click(activateReward)
+    $("#button_holder_reward").animate({opacity:1}, 1000)
+  }
+
+  function activateReward() {
+    fadeOutVictoryOutputs()
+    setTimeout(removeVictoryOutputs, 500)
+    setTimeout(function(){$(".button_holder_victory").attr("id", "button_holder_win_reward")}, 520)
+    setTimeout(displayReward, 600)
+  }
+
+  function fadeOutVictoryOutputs() {
+    disablePlayAgainButton()
+    $(".button_holder_victory").animate({opacity: 0}, 500)
+    $("#button_holder_reward").animate({opacity: 0}, 500)
+    $(".output_win").animate({opacity: 0}, 500)
+  }
+
+  function disablePlayAgainButton() {
+    $(".button_holder_victory").html("")
+    $(".button_holder_victory").append('<button>Play Again!</button>')
+  }
+
+  function enablePlayAgainButton() {
+    $(".button_holder_victory").html("")
+    $(".button_holder_victory").append('<button onclick="location.reload()">Play Again!</button>')
+  }
+
+  function removeVictoryOutputs() {
+    $("#button_holder_reward").remove()
+    $("#output_line_1").remove()
+    $("#output_line_2").remove()
+    $("#output_line_3").remove()    
+    $("#output_victory").html("")
+  }
+
+  function checkCurrentScoreToBeat() {
+    topScoresView.on('value', function(snapshot) {
+      var scoreList = snapshot.val()
+      var i = 1
+      for (var entry in scoreList) {
+        if (i === 10) {
+          scoreToBeat = scoreList[entry].score
+        }
+        i += 1
+      }
+    })
   }
 
   function startIntro(){
-    introDuration = parseInt($("body").css("-webkit-animation-duration"), 10)
-    var secondsRemaining = introDuration
+    themeSong().play()
+    checkCurrentScoreToBeat()
+    var introSecondsRemaining = parseInt($("body").css("-webkit-animation-duration"), 10)
     var introTimer = setInterval(timer, 1000)
     function timer(){
-      secondsRemaining -= 1
-      if (secondsRemaining === 0) {
+      introSecondsRemaining -= 1
+      if (introSecondsRemaining === 0) {
         clearInterval(introTimer)
         displayText()
         displaySamJack()
@@ -150,6 +420,7 @@ $(document).ready(function(){
   function checkForInactivity() {
     if (programActive && (((new Date() - timeOfLastSuccess)/1000) >= secondsOfInactivityAllowed)) {
       samJackAngerGrows(false)
+      timeOfLastSuccess = new Date()
     }
   }
 
@@ -169,8 +440,6 @@ $(document).ready(function(){
   function samJackAngerFalls() {
     samJackRagePoints -= 1
     $("#sam_jack_rage").text("Mr. Jackson's Rage Points: " + samJackRagePoints + " (if he hits " + ragePointsForDefeat + ", you lose)") 
-    var samGoodResponse = successTriggeredAudio[Math.floor(Math.random()*successTriggeredAudio.length)]
-    sample(samGoodResponse)
     changeImageOpacities()
   }
 
@@ -178,7 +447,8 @@ $(document).ready(function(){
     halfPoints = ragePointsForDefeat / 2
     if (samJackRagePoints <= (ragePointsForDefeat / 2)) {
       $("#sam_face").animate({opacity: (samJackRagePoints/halfPoints)}, 500)
-    } else {
+    } 
+    if (samJackRagePoints >= (ragePointsForDefeat / 2)) {
       $(".flames").animate({opacity: ((samJackRagePoints-halfPoints)/halfPoints)}, 500)
     }
   }
@@ -207,11 +477,11 @@ $(document).ready(function(){
       if (secondsRemaining >= 1) {
         $("#countdown").text(secondsRemaining + "...")
       } else if (secondsRemaining === 0) {
-        $("#countdown").text("Type, motherfucker!")
+        $("#countdown").text("Type, muthaphukka!")
         launchProgram()
       } else if (secondsRemaining === -1) {
         clearInterval(countdownTimer)
-        $("#countdown").animate({opacity:0}, 2000)
+        $("#countdown").animate({opacity:0}, 500)
       } else if (secondsRemaining <= -3) {
         $("#countdown").text("")
       }
@@ -221,8 +491,6 @@ $(document).ready(function(){
   function launchProgram() {
     startTime = new Date()
     programActive = true
-    /* if we allow player to play again without refreshing,
-       will need to reinitialize multiple variables here */
     timeOfLastSuccess = new Date()
   }
 
@@ -230,31 +498,37 @@ $(document).ready(function(){
     return endTime - startTime
   }
 
-  function outputWPM(totalTime) {
-    var wpm = Math.round(((letterCounter + 1)/5)/(totalTime/1000/60)*100)/100;
-    $("#output_time").html("Your WPM: " + wpm)
-    $("#output_time").animate({opacity:1}, 500)
+  function calculateScore(totalTime) {
+    wpm = Math.round(((letterCounter + 1)/5.5)/(totalTime/1000/60)*100)/100
+    accuracy = correctAttempts / (correctAttempts + failedAttempts)
+    score = Math.round(difficultyMultiplier * (wpm * accuracy + allLetters.length + longestSuccessStreak))
   }
 
-  function outputAccuracy() {
-    var accuracy = correctAttempts / (correctAttempts + failedAttempts)
-    $("#output_accuracy").html("Your Accuracy: " + (Math.round(accuracy * 100 * 100)/100) + '%')
-    $("#output_accuracy").animate({opacity:1}, 500)
+  function outputScore() {
+    $("#output_line_1").html("WPM: " + wpm)
+    $("#output_line_2").html("Longest Streak: " + longestSuccessStreak)
+    $("#output_line_3").append("Your Score: " + "<em style='color:#9966FF'>" + score + "</em>")
+  }
+
+  function outputScoreWhenHigh() {
+    $("#output_line_1").append("<span style='font-size:17pt'>WPM: " + wpm + "; Longest Streak: " + longestSuccessStreak + "</span>")
+    $("#output_line_2").append("Your Score: " + "<em style='color:#9966FF'>" + score + "</em>")
+    $("#output_line_3").append("<em>Type your name:</em>")
+    $("#user_input_line").html(highScoreUserInput)
   }
 
   function outputVictoryStatement() {
     $("#output_victory").html("Congratulations -- you win!")
-    $("#output_victory").animate({opacity:1}, 500)
   }
   
   function themeSong() {
     var sample = document.createElement('audio')
     sample.setAttribute('src', 'audio/sammyltheme.m4a')
-    sample.setAttribute('autoplay','autoplay')
-
+    sample.loop = true
     $('#themesong').click(function() {
         sample.pause()
     })
+    return sample
   }
 
   function sample(audiofile) {
@@ -281,6 +555,43 @@ $(document).ready(function(){
     $('#lightning').css("top",topVal)
     $('#lightning').append("<img src='sj_pics/lightning.jpg' style='width:" + lightningWidth + "px; height:auto;'>")
     setTimeout(function(){$('#lightning').html("")}, 100)
+  }
+
+  function displayReward() {
+    buttonList = ['correctimundo', 'tasty_burger', 'muthaphukka', 'fuck_you', 'hold_on_to_your_butts', 
+                  "i_dont_remember", 'please_continue', 'say_what_again', 'shut_the_fuck_up', 'tasty_beverage',
+                  'whats_the_matter', 'english_muthaphukka']
+    var i = buttonList.length - 1
+    while (i >= 0) {
+      currFilename = buttonList[i]
+      buttonInnerWords = currFilename.split("_")
+      var j = 0
+      wordCount = buttonInnerWords.length - 1
+      while (j <= wordCount) {
+        buttonInnerWords[j] = buttonInnerWords[j].charAt(0).toUpperCase() + buttonInnerWords[j].slice(1)
+        if (buttonInnerWords[j] === "Dont") {
+          buttonInnerWords[j] = "Don't"
+        }
+        j += 1
+      }
+      buttonInnerText = buttonInnerWords.join(" ")
+      $("#" + currFilename).append("<button id=" + currFilename + "_btn>" + buttonInnerText + "</button>")
+      sampleMaker(currFilename)
+      i -= 1
+    }
+    $("#output_victory").html("Partake of my words, muthaphukka.")
+    $("#output_victory").animate({opacity: 1}, 1000)
+    enablePlayAgainButton()
+    $("#button_holder_win_reward").animate({opacity: 1}, 1000)
+    $("#soundboard").animate({opacity: 1}, 1000)
+  }
+
+  function sampleMaker(audiofile){
+    var sample = document.createElement('audio')
+    sample.setAttribute('src', "audio/" + audiofile + '.mp3')
+    $('#' + audiofile + '_btn').click(function() {
+        sample.play();
+    })
   }
 
 })

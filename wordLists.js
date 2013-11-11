@@ -22,11 +22,9 @@ var errorTriggeredAudio = [
 
 "fuck_you",
 
-"MuthaFucka",
+"muthaphukka",
 
 "please_continue",
-
-"english_muthafucka",
 
 "whats_the_matter"
 
@@ -34,8 +32,11 @@ var errorTriggeredAudio = [
 
 var successTriggeredAudio = [
 
-"Correctimundo",
+"correctimundo",
 
-"tasty_burger"
+"tasty_burger",
+
+"hold_on_to_your_butts"
 
 ]
+
