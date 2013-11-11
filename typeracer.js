@@ -1,7 +1,10 @@
-// TODO: Remove Firebase entries for users whose score is no longer top 10
+// TODO: Make an empty name entry go through as 'Anonymous'
+// TODO: On high score name entry page, make enter trigger 'submit'
+// TODO: Consider making high score entry page first fadeout upon submit, then reload page; skips reward but gets rid of confusion
 // TODO: Add toggle button for theme song (Daniel E already built in an event listener and id for this) 
 // TODO: Check to ensure that visitor is using Chrome. If they aren't, suggest they download it; the page may hardly work on other browsers.
 // TODO: Use CSS trick I used on difficulty page text to fix up text on victory, defeat screens, perhaps even in-game typing screen (both for text and face/flame images)
+// TODO: Remove Firebase entries for users whose score is no longer top 10
 
 // TODO: Make CSS better -- things shouldn't move around screen on window resize
 // TODO: Make the intro animation fade in from black
@@ -307,6 +310,9 @@ $(document).ready(function(){
       randURLEnding += characters[Math.floor(Math.random() * characters.length)]
     }
     var newRef = new Firebase('https://theoriginalsljtyperacer.firebaseIO.com/' + randURLEnding)
+    if (highScoreUserInput.length === 0) {
+      highScoreUserInput = 'Anonymous'
+    }
     newRef.setWithPriority({name: highScoreUserInput, score: score}, 1/score)
     fadeOutHighScoreOutputs()
     setTimeout(removeHighScoreOutputs, 500)
