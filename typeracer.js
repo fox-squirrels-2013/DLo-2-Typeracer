@@ -1,6 +1,4 @@
-// TODO: Use a conditional in activateVictory to give user correct page (high score or normal victory)
-// TODO: Create new text for victory screen that displays if and only if your score is a top score
-// TODO: Let this new 'high score' victory screen take input from you for your name; will need 'submit' button and 'backspace' button. Submission can lead to high score page.
+// TODO: Let this new 'high score' victory screen take input from you for your name
 // TODO: Integrate Firebase to make the leaderboard real
 // TODO: Add toggle button for theme song (Daniel E already built in an event listener and id for this) 
 // TODO: Check to ensure that visitor is using Chrome. If they aren't, only show them a page that tells them to download it and come back.
@@ -10,7 +8,7 @@
 // TODO: Make the intro animation fade in from black
 // TODO: Try using input button elements instead of button elements, to see if we can get rid of the highlight box that appears
 // TODO: Add a special sound from SLJ for victory and defeat
-// TODO: Make SLJ's face move up and down a little bit at random
+// TODO: Make SLJ's face move up and down a little bit at random during game
 // TODO: Make inactivity rage countup start about a second or so more quickly, as it seemingly should?
 
 $(document).ready(function(){
@@ -29,6 +27,7 @@ $(document).ready(function(){
   var ragePointsForDefeat = 10
   var chanceStreakTriggersAudio = 0.5
   var secondsEndGameScreenSlideTime = 1.5
+  var highScoreUserInput = 'Frank'
   var difficultyMultiplier
   var allWords = wordList[Math.floor(Math.random()*wordList.length)]
   var allLetters = allWords.split("")
@@ -79,7 +78,7 @@ $(document).ready(function(){
 
   function fadeInLeaderboard() {
     $("#leaderboard_welcome").html("Top Muthaphukkas")
-    i = 1
+    var i = 1
     while (i <= 10) {
       $("#leader_" + i).html((topScores[i-1].join(" - ")))
       i += 1
@@ -87,7 +86,7 @@ $(document).ready(function(){
     $("#home_button_holder").html('<button>Return Home</button>')
     $("#home_button_holder button").on("click",returnToStartElements)
     $("#leaderboard_welcome").animate({opacity: 1, "top":"5%"}, 1000)
-    j = 1
+    var j = 1
     setTimeout(function() {
       while (j <= 10) {
         $("#leader_" + j).animate({opacity: 1, "top":((7 * j + 7) + "%")}, 1000)
@@ -99,7 +98,7 @@ $(document).ready(function(){
 
   function fadeOutLeaderboard() {
     $("#home_button_holder").animate({opacity: 0, "top":"174%"}, 1000)
-    j = 10
+    var j = 10
     setTimeout(function() {
       while (j >= 1) {
         $("#leader_" + j).animate({opacity: 0, "top":((7 * j + 107) + "%")}, 1000)
@@ -256,7 +255,22 @@ $(document).ready(function(){
     $("#user_input_line").animate({opacity:1}, 500)
     outputBackspaceButton()
     outputSubmitScoreButton()
-    // IMPLEMENTING
+  }
+
+  function fadeOutHighScoreOutputs() {
+    $(".output_win").animate({opacity:0}, 500)
+    $("#user_input_line").animate({opacity:0}, 500)
+    $("#button_holder_backspace").animate({opacity:0}, 500)
+    $("#button_holder_submit").animate({opacity:0}, 500)
+  }
+
+  function removeHighScoreOutputs() {
+    $("#button_holder_backspace").remove()
+    $("#button_holder_submit").remove()
+    $("#output_line_1").remove()
+    $("#output_line_2").remove()
+    $("#output_line_3").remove() 
+    $("#user_input_line").remove()  
   }
 
   function outputBackspaceButton() {
@@ -266,11 +280,41 @@ $(document).ready(function(){
   }
 
   function outputSubmitScoreButton() {
-    // IMPLEMENTING
+    $("#button_holder_submit").append('<button id="submit">Submit</button>')
+    $("#submit").click(userInputSubmit)
+    $("#button_holder_submit").animate({opacity:1}, 500)
+  }
+
+  function userInputSubmit() {
+    var i = 0
+    var doneLooping = false
+    var indexOfNewScore = 9
+    while (i <= 8 && !(doneLooping)) {
+      if (score > topScores[i][1]) {
+        indexOfNewScore = i
+        doneLooping = true
+      }
+      i += 1
+    }
+    newEntry = [[highScoreUserInput, score]]
+    topScores = topScores.slice(0, indexOfNewScore).concat(newEntry).concat(topScores.slice(indexOfNewScore))
+    topScores.pop()
+    fadeOutHighScoreOutputs()
+    setTimeout(removeHighScoreOutputs, 500)
+    setTimeout(function(){$(".button_holder_victory").append('<button>Play Again!</button>')}, 510)
+    setTimeout(function(){$(".button_holder_victory").attr("id", "button_holder_win_reward")}, 520) 
+    setTimeout(displayReward, 600)
+    console.log(topScores)
   }
 
   function userInputBackspace() {
-    // IMPLEMENTING
+    highScoreUserInput = highScoreUserInput.slice(0, highScoreUserInput.length-1)
+    $("#user_input_line").html(highScoreUserInput)
+  }
+
+  function userInputAddKeystroke(character) {
+    highScoreUserInput += character
+    $("#user_input_line").html(highScoreUserInput)
   }
 
   function outputHighScoreStatement() {
@@ -447,9 +491,8 @@ $(document).ready(function(){
   function outputScoreWhenHigh() {
     $("#output_line_1").append("<span style='font-size:17pt'>WPM: " + wpm + "; Longest Streak: " + longestSuccessStreak + "</span>")
     $("#output_line_2").append("Your Score: " + "<em style='color:#9966FF'>" + score + "</em>")
-    $("#output_line_3").append("<em>Enter your name:</em>")
-    $("#user_input_line").html("User Input Will Go Here")
-    // IMPLEMENTING
+    $("#output_line_3").append("<em>Type your name:</em>")
+    $("#user_input_line").html(highScoreUserInput)
   }
 
   function outputVictoryStatement() {
@@ -496,11 +539,11 @@ $(document).ready(function(){
     buttonList = ['correctimundo', 'tasty_burger', 'muthaphukka', 'fuck_you', 'hold_on_to_your_butts', 
                   "i_dont_remember", 'please_continue', 'say_what_again', 'shut_the_fuck_up', 'tasty_beverage',
                   'whats_the_matter', 'english_muthaphukka']
-    i = buttonList.length - 1
+    var i = buttonList.length - 1
     while (i >= 0) {
       currFilename = buttonList[i]
       buttonInnerWords = currFilename.split("_")
-      j = 0
+      var j = 0
       wordCount = buttonInnerWords.length - 1
       while (j <= wordCount) {
         buttonInnerWords[j] = buttonInnerWords[j].charAt(0).toUpperCase() + buttonInnerWords[j].slice(1)

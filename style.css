@@ -303,7 +303,7 @@ body {
 
 #button_holder_backspace {
   position: absolute;
-  left: 10%;
+  left: 13%;
   top: 51%;
   z-index: 4;
   opacity: 0;
@@ -316,11 +316,33 @@ body {
   width: 100px;
   height: 30px;
   font-size: 14px;
-  color: black;
+  color: white;
 }
 
 #button_holder_backspace button:hover {
   background-color: #FF8080;
+}
+
+#button_holder_submit {
+  position: absolute;
+  left: 24%;
+  top: 51%;
+  z-index: 4;
+  opacity: 0;
+}
+
+#button_holder_submit button {
+  border: 0;
+  background-color: #9966FF;
+  border-radius: 20px;
+  width: 100px;
+  height: 30px;
+  font-size: 14px;
+  color: white;
+}
+
+#button_holder_submit button:hover {
+  background-color: #C2A3FF;
 }
 
 #button_holder_lose {
