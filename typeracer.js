@@ -1,4 +1,3 @@
-// TODO: Let this new 'high score' victory screen take input from you for your name
 // TODO: Integrate Firebase to make the leaderboard real
 // TODO: Add toggle button for theme song (Daniel E already built in an event listener and id for this) 
 // TODO: Check to ensure that visitor is using Chrome. If they aren't, only show them a page that tells them to download it and come back.
@@ -27,7 +26,8 @@ $(document).ready(function(){
   var ragePointsForDefeat = 10
   var chanceStreakTriggersAudio = 0.5
   var secondsEndGameScreenSlideTime = 1.5
-  var highScoreUserInput = 'Frank'
+  var highScoreInputTime = false
+  var highScoreUserInput = ''
   var difficultyMultiplier
   var allWords = wordList[Math.floor(Math.random()*wordList.length)]
   var allLetters = allWords.split("")
@@ -166,6 +166,10 @@ $(document).ready(function(){
   $(document).keypress(function(event) {
     var enteredLetterCode = event.keyCode
     var enteredLetter = String.fromCharCode(enteredLetterCode)
+    if (highScoreInputTime === true && highScoreUserInput.length <= 16) {
+      highScoreUserInput += enteredLetter
+      $("#user_input_line").html(highScoreUserInput)
+    }
     if ((enteredLetter === correctLetter) && programActive) {
       if (letterCounter === 0) {
         allLetters[letterCounter] = "<span style='color:#C377F2;'>" + allLetters[letterCounter] + "</span>"
@@ -253,6 +257,7 @@ $(document).ready(function(){
     outputScoreWhenHigh()
     $(".output_win").animate({opacity:1}, 500)
     $("#user_input_line").animate({opacity:1}, 500)
+    setTimeout(function(){highScoreInputTime = true}, 500)
     outputBackspaceButton()
     outputSubmitScoreButton()
   }
@@ -286,6 +291,7 @@ $(document).ready(function(){
   }
 
   function userInputSubmit() {
+    highScoreInputTime = false
     var i = 0
     var doneLooping = false
     var indexOfNewScore = 9
@@ -304,7 +310,6 @@ $(document).ready(function(){
     setTimeout(function(){$(".button_holder_victory").append('<button>Play Again!</button>')}, 510)
     setTimeout(function(){$(".button_holder_victory").attr("id", "button_holder_win_reward")}, 520) 
     setTimeout(displayReward, 600)
-    console.log(topScores)
   }
 
   function userInputBackspace() {
@@ -557,7 +562,7 @@ $(document).ready(function(){
       sampleMaker(currFilename)
       i -= 1
     }
-    $("#output_victory").html("Partake of my words, muthapukka.")
+    $("#output_victory").html("Partake of my words, muthaphukka.")
     $("#output_victory").animate({opacity: 1}, 1000)
     enablePlayAgainButton()
     $("#button_holder_win_reward").animate({opacity: 1}, 1000)
