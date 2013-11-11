@@ -1,12 +1,10 @@
-// TODO: Implement fadeIn and fadeOut functions for leaderboard
 // TODO: Use a conditional in activateVictory to give user correct page (high score or normal victory)
 // TODO: Create new text for victory screen that displays if and only if your score is a top score
 // TODO: Let this new 'high score' victory screen take input from you for your name; will need 'submit' button and 'backspace' button. Submission can lead to high score page.
 // TODO: Integrate Firebase to make the leaderboard real
-// TODO: Change spellings to 'Muthaphukka'
 // TODO: Add toggle button for theme song (Daniel E already built in an event listener and id for this) 
-// TODO: Use CSS trick I used on difficulty page text to fix up text on victory, defeat screens, perhaps even in-game typing screen (both for text and face/flame images)
 // TODO: Check to ensure that visitor is using Chrome. If they aren't, only show them a page that tells them to download it and come back.
+// TODO: Use CSS trick I used on difficulty page text to fix up text on victory, defeat screens, perhaps even in-game typing screen (both for text and face/flame images)
 
 // TODO: Make CSS better -- things shouldn't move around screen on window resize
 // TODO: Make the intro animation fade in from black
@@ -36,7 +34,7 @@ $(document).ready(function(){
   var allLetters = allWords.split("")
   var topScores = [['Nobody', 1000], ['Nobody', 1000], ['Nobody', 1000], ['Nobody', 1000],
                    ['Nobody', 1000], ['Nobody', 1000], ['Nobody', 1000], ['Nobody', 1000],
-                   ['Nobody', 1000], ['Nobody', 1000]]
+                   ['Nobody', 1000], ['Nobody', 100]]
 
   $("#easy_holder").on("click", function(){
     secondsOfInactivityAllowed = 2
@@ -81,21 +79,39 @@ $(document).ready(function(){
 
   function fadeInLeaderboard() {
     $("#leaderboard_welcome").html("Top Muthaphukkas")
+    i = 1
+    while (i <= 10) {
+      $("#leader_" + i).html((topScores[i-1].join(" - ")))
+      i += 1
+    }
     $("#home_button_holder").html('<button>Return Home</button>')
     $("#home_button_holder button").on("click",returnToStartElements)
     $("#leaderboard_welcome").animate({opacity: 1, "top":"5%"}, 1000)
-    setTimeout(function(){$("#home_button_holder").animate({opacity: 1, "top":"74%"}, 1000)}, 100)
-    // IMPLEMENTING: this is where the top scores need to pop up, along with a title and 'return to main page' button
+    j = 1
+    setTimeout(function() {
+      while (j <= 10) {
+        $("#leader_" + j).animate({opacity: 1, "top":((7 * j + 7) + "%")}, 1000)
+        j += 1
+      }
+    }, 100)
+    setTimeout(function(){$("#home_button_holder").animate({opacity: 1, "top":"85%"}, 1000)}, 200)
   }
 
   function fadeOutLeaderboard() {
     $("#home_button_holder").animate({opacity: 0, "top":"174%"}, 1000)
-    setTimeout(function(){$("#leaderboard_welcome").animate({opacity: 0, "top":"105%"}, 1000)}, 100)
-    // IMPLEMENTING
+    j = 10
+    setTimeout(function() {
+      while (j >= 1) {
+        $("#leader_" + j).animate({opacity: 0, "top":((7 * j + 107) + "%")}, 1000)
+        j -= 1
+      }
+    }, 100)
+    setTimeout(function(){$("#leaderboard_welcome").animate({opacity: 0, "top":"105%"}, 1000)}, 200)
   }
 
   function removeLeaderboard() {
     $(".leaderboard").remove()
+    $(".leaderboard_val").remove()
   }
 
   function fadeOutStartElements() {
@@ -218,7 +234,11 @@ $(document).ready(function(){
   function activateVictory() {
     $('#victory_img').animate({"right": "0%"}, secondsEndGameScreenSlideTime * 1000)
     calculateScore(getTotalTime())
-    setTimeout(displayVictoryOutputs, secondsEndGameScreenSlideTime * 1000)
+    if (score > topScores[9][1]) {
+      setTimeout(displayHighScoreOutputs, secondsEndGameScreenSlideTime * 1000)
+    } else {
+      setTimeout(displayVictoryOutputs, secondsEndGameScreenSlideTime * 1000)
+    }
   }
 
   function displayVictoryOutputs() {
@@ -227,6 +247,34 @@ $(document).ready(function(){
     $(".output_win").animate({opacity:1}, 500)
     outputPlayAgainButtonWin()
     outputRewardButton()   
+  }
+
+  function displayHighScoreOutputs() {
+    outputHighScoreStatement()
+    outputScoreWhenHigh()
+    $(".output_win").animate({opacity:1}, 500)
+    $("#user_input_line").animate({opacity:1}, 500)
+    outputBackspaceButton()
+    outputSubmitScoreButton()
+    // IMPLEMENTING
+  }
+
+  function outputBackspaceButton() {
+    $("#button_holder_backspace").append('<button id="backspace">Backspace</button>')
+    $("#backspace").click(userInputBackspace)
+    $("#button_holder_backspace").animate({opacity:1}, 500)
+  }
+
+  function outputSubmitScoreButton() {
+    // IMPLEMENTING
+  }
+
+  function userInputBackspace() {
+    // IMPLEMENTING
+  }
+
+  function outputHighScoreStatement() {
+    $("#output_victory").append("<em style='color:#9966FF'>High score, muthaphukka!</em>")
   }
 
   function activateDefeat() {
@@ -394,6 +442,14 @@ $(document).ready(function(){
     $("#output_line_1").html("WPM: " + wpm)
     $("#output_line_2").html("Longest Streak: " + longestSuccessStreak)
     $("#output_line_3").append("Your Score: " + "<em style='color:#9966FF'>" + score + "</em>")
+  }
+
+  function outputScoreWhenHigh() {
+    $("#output_line_1").append("<span style='font-size:17pt'>WPM: " + wpm + "; Longest Streak: " + longestSuccessStreak + "</span>")
+    $("#output_line_2").append("Your Score: " + "<em style='color:#9966FF'>" + score + "</em>")
+    $("#output_line_3").append("<em>Enter your name:</em>")
+    $("#user_input_line").html("User Input Will Go Here")
+    // IMPLEMENTING
   }
 
   function outputVictoryStatement() {

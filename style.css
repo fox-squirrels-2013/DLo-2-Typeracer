@@ -100,10 +100,68 @@ body {
   font-size: 20pt;
 }
 
+.leaderboard_val {
+  position: absolute;
+  width: 50%;
+  left: 25%;
+  color: red;
+  font-size: 14pt;
+}
+
+#leader_1 {
+  opacity: 0;
+  top: 112%;
+}
+
+#leader_2 {
+  opacity: 0;
+  top: 119%;  
+}
+
+#leader_3 {
+  opacity: 0;
+  top: 126%;  
+}
+
+#leader_4 {
+  opacity: 0;
+  top: 133%;
+}
+
+#leader_5 {
+  opacity: 0;
+  top: 140%;
+}
+
+#leader_6 {
+  opacity: 0;
+  top: 147%;
+}
+
+#leader_7 {
+  opacity: 0;
+  top: 154%;
+}
+
+#leader_8 {
+  opacity: 0;
+  top: 161%;
+}
+
+#leader_9 {
+  opacity: 0;
+  top: 168%;
+}
+
+#leader_10 {
+  opacity: 0;
+  top: 175%;
+}
+
 #home_button_holder {
   position: absolute;
   opacity: 0;
-  top: 174%;
+  top: 183%;
   left: 44%;
 }
 
@@ -243,6 +301,28 @@ body {
   background-color: #C2A3FF;
 }
 
+#button_holder_backspace {
+  position: absolute;
+  left: 10%;
+  top: 51%;
+  z-index: 4;
+  opacity: 0;
+}
+
+#button_holder_backspace button {
+  border: 0;
+  background-color: red;
+  border-radius: 20px;
+  width: 100px;
+  height: 30px;
+  font-size: 14px;
+  color: black;
+}
+
+#button_holder_backspace button:hover {
+  background-color: #FF8080;
+}
+
 #button_holder_lose {
   position: absolute;
   left: 22%;
@@ -314,6 +394,16 @@ body {
 
 #output_line_3 {
   top: 36%;
+}
+
+#user_input_line {
+  opacity: 0;
+  z-index: 4;
+  position: absolute;
+  left: 0%;  
+  width: 45%;
+  color: #9966FF;
+  top: 44%;
 }
 
 .output_lose {
